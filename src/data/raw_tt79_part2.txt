@@ -1,0 +1,195 @@
+# Chương III NỘI DUNG MẪU HỒ SƠ ĐẤU THẦU
+
+## Điều 26. Lập, trình, thẩm định (nếu có), phê duyệt E-HSMQT, E-HSMST, E-HSMT
+
+1. Tổ chuyên gia lập E-HSMQT, E-HSMST, E-HSMT trên Hệ thống. Sau khi tổ chuyên gia lập E-HSMQT, E-HSMST, E-HSMT, tổ chuyên gia trình chủ đầu tư để chủ đầu tư tổ chức thẩm định (nếu có), phê duyệt E-HSMQT, E-HSMST, E-HSMT.
+
+2. E-HSMQT, E-HSMST, E-HSMT phải bao gồm đầy đủ các thông tin cần thiết để làm cơ sở cho nhà thầu chuẩn bị E-HSQT, E-HSDST, E-HSDT. Trường hợp chủ đầu tư đăng tải E-HSMQT, E-HSMST, E-HSMT không đầy đủ thông tin (thiếu thiết kế, bản vẽ và các tài liệu khác) hoặc thông tin không rõ ràng, gây khó khăn cho nhà thầu trong việc chuẩn bị E-HSQT, E-HSDST, E-HSDT thì E-HSMQT, E-HSMST, E-HSMT này không hợp lệ; chủ đầu tư phải sửa đổi, bổ sung E-HSMQT, E-HSMST, E-HSMT cho phù hợp và tiến hành đăng tải lại E-HSMQT, E-HSMST, E-HSMT. Việc sửa đổi E-HSMQT, E-HSMST, E-HSMT thực hiện theo quy định tại khoản 2 Điều 15 và khoản 2 Điều 18 của Thông tư này.
+
+3. Đối với gói thầu mua sắm hàng hóa, xây lắp, dịch vụ phi tư vấn, EPC, EP, EC, PC, máy đặt, máy mượn, bảng dữ liệu, tiêu chuẩn đánh giá về tính hợp lệ, yêu cầu về năng lực, kinh nghiệm trong E-HSMST, E-HSMT được số hóa dưới dạng webform trên Hệ thống. Chủ đầu tư không được đính kèm các file yêu cầu khác về bảng dữ liệu, tiêu chuẩn đánh giá về tính hợp lệ, yêu cầu về năng lực, kinh nghiệm trong E-HSMST, E-HSMT. Bảng dữ liệu, tiêu chuẩn đánh giá về tính hợp lệ, yêu cầu về năng lực, kinh nghiệm không phải là bản được số hóa dưới dạng webform sẽ không được coi là một phần của E-HSMST, E-HSMT và nhà thầu không phải đáp ứng các yêu cầu này.
+
+4. Trường hợp gói thầu đã áp dụng sơ tuyển, mời quan tâm, nếu năng lực và kinh nghiệm của nhà thầu khi nộp E-HSDT có sự thay đổi so với khi tham dự sơ tuyển, quan tâm thì nhà thầu phải cập nhật lại năng lực và kinh nghiệm của mình khi tham dự thầu.
+
+5. Trường hợp E-HSMT có các nội dung dẫn đến hạn chế sự tham gia của nhà thầu hoặc tạo lợi thế cho một hoặc một số nhà thầu gây ra sự cạnh tranh không bình đẳng, vi phạm quy định tại khoản 3 Điều 44 của Luật Đấu thầu thì các nội dung này không phải là căn cứ để đánh giá E-HSDT theo quy định tại khoản 1 Điều 29 của Nghị định số 214/2025/NĐ-CP.
+
+## Điều 27. Trách nhiệm của nhà thầu trong quá trình tham dự thầu
+
+1. Nhà thầu chịu trách nhiệm về tính chính xác của các thông tin kê khai trên webform và file tài liệu đính kèm trong quá trình tham dự thầu. Nhà thầu nhập thông tin theo yêu cầu của E-HSMQT, E-HSMST, E-HSMT và đính kèm các file tài liệu để tạo thành bộ E-HSQT, E-HSDST, E-HSDT như sau:
+
+a) Thông tin về tính hợp lệ của E-HSQT, E-HSDST, E-HSDT:
+
+Đối với nội dung về bảo đảm dự thầu, nhà thầu kê khai thông tin và đính kèm bản scan bảo đảm dự thầu. Trường hợp sử dụng bảo lãnh dự thầu điện tử, nhà thầu chọn bảo lãnh dự thầu do tổ chức tín dụng trong nước hoặc chi nhánh ngân hàng nước ngoài được thành lập theo pháp luật Việt Nam phát hành hoặc giấy chứng nhận bảo hiểm bảo lãnh của doanh nghiệp bảo hiểm phi nhân thọ trong nước, chi nhánh doanh nghiệp bảo hiểm phi nhân thọ nước ngoài được thành lập theo pháp luật Việt Nam phát hành, lưu trữ trên Hệ thống vào E-HSDT. Đối với nhà thầu liên danh, các thành viên liên danh phải sử dụng cùng thể thức bảo lãnh dự thầu: bảo lãnh dự thầu điện tử hoặc bằng giấy;
+
+Đối với các nội dung còn lại, nhà thầu chỉ kê khai thông tin trên webform mà không cần đính kèm bản scan các văn bản, tài liệu liên quan.
+
+b) Thông tin về năng lực, kinh nghiệm:
+
+Đối với hợp đồng tương tự, năng lực sản xuất: nhà thầu kê khai và đính kèm file tài liệu liên quan để chứng minh thông tin đã kê khai;
+
+Đối với yêu cầu về nguồn lực tài chính: nhà thầu kê khai thông tin; trường hợp chủ đầu tư cho phép sử dụng cam kết cung cấp tín dụng và nhà thầu sử dụng cam kết cung cấp tín dụng để chứng minh nguồn lực tài chính, ngoài việc kê khai thông tin, nhà thầu phải đính kèm bản scan cam kết cung cấp tín dụng trong E-HSDST, E-HSDT;
+
+Đối với doanh thu hằng năm, giá trị tài sản ròng: kể từ năm 2021, Hệ thống tự động trích xuất số liệu về báo cáo tài chính từ Hệ thống thông tin quốc gia về đăng ký doanh nghiệp, Hệ thống thuế điện tử vào hồ sơ năng lực của nhà thầu;
+
+Đối với các nội dung khác: nhà thầu kê khai trên webform mà không cần đính kèm bản scan các văn bản, tài liệu liên quan;
+
+Đối với số liệu về báo cáo tài chính kể từ năm 2021, trường hợp nhà thầu phát hiện Hệ thống chưa cập nhật số liệu so với Hệ thống thuế điện tử của các năm từ năm 2021 thì nhà thầu sửa đổi thông tin cho phù hợp với số liệu đã báo cáo với cơ quan thuế; trường hợp số liệu mà nhà thầu cập nhật, sửa đổi trên Hệ thống không thống nhất với số liệu trên Hệ thống thuế điện tử dẫn đến làm sai lệch kết quả lựa chọn nhà thầu thì nhà thầu bị coi là gian lận, vi phạm khoản 4 Điều 16 của Luật Đấu thầu.
+
+2. Nhà thầu có trách nhiệm nghiên cứu E-HSMQT, E-HSMST, E-HSMT đối với các gói thầu mà nhà thầu quan tâm để chuẩn bị E-HSQT, E-HSDST, E-HSDT cho phù hợp với yêu cầu của E-HSMQT, E-HSMST, E-HSMT. Trường hợp phát hiện E-HSMQT, E-HSMST, E-HSMT có các nội dung không rõ ràng, gây khó khăn cho nhà thầu trong việc chuẩn bị E-HSQT, E-HSDST, E-HSDT thì nhà thầu phải yêu cầu chủ đầu tư làm rõ E-HSMQT, E-HSMST, E-HSMT để chủ đầu tư sửa đổi, bổ sung các tài liệu này cho phù hợp.
+
+3. Nhà thầu có trách nhiệm theo dõi, cập nhật các thông tin trên Hệ thống đối với gói thầu mà nhà thầu quan tâm hoặc tham dự. Trường hợp xảy ra các sai sót do không theo dõi, cập nhật thông tin trên Hệ thống dẫn đến bất lợi cho nhà thầu trong quá trình tham dự thầu bao gồm: thay đổi, sửa đổi về E-HSMQT, E-HSMST, E-HSMT, thời gian nộp E-HSQT, E-HSDST, E-HSDT, thời gian làm rõ E-HSQT, E-HSDST, E-HSDT, thời gian thương thảo hợp đồng và các nội dung khác thì nhà thầu phải tự chịu trách nhiệm và chịu bất lợi trong quá trình tham dự thầu.
+
+4. Trường hợp người đại diện theo pháp luật của nhà thầu ủy quyền cho giám đốc chi nhánh, giám đốc công ty con hạch toán phụ thuộc, giám đốc xí nghiệp và người đứng đầu đơn vị hạch toán phụ thuộc khác để thực hiện các công việc trong quá trình tham dự thầu thì việc tham dự thầu trên Hệ thống phải được thực hiện bằng tài khoản tham gia Hệ thống của nhà thầu mà không được sử dụng tài khoản tham gia Hệ thống của chi nhánh, công ty con, xí nghiệp, đơn vị hạch toán phụ thuộc khác. Trường hợp sử dụng tài khoản tham gia Hệ thống của chi nhánh hoặc các đơn vị phụ thuộc (hạch toán phụ thuộc) thì nhà thầu sẽ bị coi là không đáp ứng về tư cách hợp lệ theo quy định tại khoản 1 Điều 5 của Luật Đấu thầu.
+
+5. Thực hiện các trách nhiệm khác bao gồm:
+
+a) Đăng ký tham gia Hệ thống để bảo đảm tư cách hợp lệ theo quy định tại điểm d khoản 1 Điều 5 của Luật Đấu thầu;
+
+b) Thực hiện các trách nhiệm theo quy định tại Điều 82 của Luật Đấu thầu;
+
+c) Quản lý tài khoản tham gia Hệ thống, chứng thư số đăng ký trên Hệ thống.
+
+## Điều 28. Nội dung về hàng mẫu
+
+E-HSMT không được đưa ra yêu cầu về hàng mẫu; trường hợp cần yêu cầu về hàng mẫu để đánh giá về kỹ thuật thì chủ đầu tư phải bảo đảm việc yêu cầu cung cấp hàng mẫu không dẫn đến làm tăng chi phí của gói thầu, hạn chế sự tham gia của nhà thầu hoặc nhằm tạo lợi thế cho một hoặc một số nhà thầu gây ra sự cạnh tranh không bình đẳng. Trường hợp E-HSMT có yêu cầu cung cấp hàng mẫu, nhà thầu có thể nộp bổ sung hàng mẫu trong thời hạn 05 ngày làm việc sau thời điểm đóng thầu.
+
+## Điều 29. Mở thầu đối với lựa chọn nhà thầu qua mạng
+
+1. Đối với gói thầu áp dụng phương thức một giai đoạn một túi hồ sơ:
+
+Chủ đầu tư phải tiến hành mở thầu và công khai biên bản mở thầu trên Hệ thống trong thời hạn 02 giờ kể từ thời điểm đóng thầu.
+
+2. Đối với gói thầu áp dụng phương thức một giai đoạn hai túi hồ sơ:
+
+a) Chủ đầu tư phải tiến hành mở E-HSĐXKT và công khai biên bản mở E-HSĐXKT trên Hệ thống trong thời hạn 02 giờ kể từ thời điểm đóng thầu;
+
+b) Sau khi có quyết định phê duyệt danh sách nhà thầu đáp ứng yêu cầu về kỹ thuật, chủ đầu tư đăng tải danh sách này trên Hệ thống và đính kèm bản chụp (scan) văn bản phê duyệt danh sách nhà thầu đáp ứng yêu cầu về kỹ thuật trên Hệ thống. Sau khi đăng tải thành công, Hệ thống gửi thông báo đến các nhà thầu tham dự gói thầu;
+
+c) Sau khi đăng tải danh sách nhà thầu đáp ứng yêu cầu về kỹ thuật, chủ đầu tư mở E-HSĐXTC của các nhà thầu có tên trong danh sách nhà thầu đáp ứng yêu cầu về kỹ thuật và công khai biên bản mở E-HSĐXTC trên Hệ thống.
+
+## Điều 30. Đánh giá E-HSDT
+
+1. Quy trình đánh giá E-HSDT:
+
+a) Quy trình 01 áp dụng cho tất cả các gói thầu, gồm: đánh giá tính hợp lệ của E-HSDT; đánh giá về năng lực và kinh nghiệm; đánh giá về kỹ thuật; đánh giá về tài chính.
+
+Đối với gói thầu mua sắm tập trung cần lựa chọn nhà thầu theo khả năng cung cấp, việc đánh giá về bảo đảm dự thầu, doanh thu bình quân hằng năm, hợp đồng tương tự, năng lực sản xuất được thực hiện tại bước đánh giá về tài chính.
+
+b) Quy trình 02 áp dụng đối với gói thầu mua sắm hàng hóa, dịch vụ phi tư vấn, máy đặt, máy mượn theo phương thức một giai đoạn một túi hồ sơ, sử dụng phương pháp “giá thấp nhất” và các nhà thầu, E-HSDT đều không có bất kỳ ưu đãi nào. Căn cứ vào biên bản mở thầu, Hệ thống tự động xếp hạng nhà thầu theo giá dự thầu sau khi trừ đi giá trị giảm giá (nếu có) thấp nhất (không phải phê duyệt danh sách xếp hạng nhà thầu trong trường hợp này). Trường hợp có từ 02 nhà thầu trở lên cùng xếp thứ nhất thì không đánh giá theo quy trình 02 mà phải đánh giá theo quy trình 01.
+
+- Đánh giá tính hợp lệ của E-HSDT của nhà thầu xếp hạng thứ nhất.
+
+- Đánh giá về năng lực và kinh nghiệm của nhà thầu xếp hạng thứ nhất.
+
+- Đánh giá về kỹ thuật của nhà thầu xếp hạng thứ nhất.
+
+Trường hợp nhà thầu xếp hạng thứ nhất không đáp ứng thì đánh giá đối với nhà thầu xếp hạng tiếp theo.
+
+c) Đối với gói thầu áp dụng theo phương thức một giai đoạn một túi hồ sơ, căn cứ vào E-HSDT của các nhà thầu đã nộp trên Hệ thống và phương pháp đánh giá E-HSDT quy định trong E-HSMT, tổ chuyên gia được chọn một trong hai quy trình quy định tại điểm a và điểm b khoản này để đánh giá E-HSDT. Quy trình 02 chỉ thực hiện khi đáp ứng đầy đủ các điều kiện quy định tại điểm b khoản này.
+
+2. Trường hợp chỉ có 01 nhà thầu tham dự thầu hoặc chỉ có 01 nhà thầu vượt qua bước đánh giá về kỹ thuật thì không cần xác định giá đánh giá (trong trường hợp gói thầu áp dụng phương pháp giá đánh giá), điểm tổng hợp (trong trường hợp gói thầu áp dụng phương pháp kết hợp giữa kỹ thuật và giá), không cần xác định ưu đãi, không cần xếp hạng nhà thầu.
+
+3. Sau khi đánh giá E-HSDT, tổ trưởng tổ chuyên gia đính kèm bản scan báo cáo đánh giá E-HSDT (có chữ ký của tất cả thành viên trong tổ chuyên gia) trên Hệ thống. Tổ trưởng tổ chuyên gia chịu trách nhiệm về sự thống nhất giữa bản báo cáo đánh giá E-HSDT scan đính kèm trên Hệ thống và bản báo cáo đánh giá E-HSDT bằng giấy có chữ ký của các thành viên trong tổ chuyên gia.
+
+## Điều 31. Trình, thẩm định (nếu có) và phê duyệt kết quả lựa chọn nhà thầu
+
+1. Tổ chuyên gia lập báo cáo đánh giá theo quy định tại khoản 5 Điều 32 của Nghị định số 214/2025/NĐ-CP trình chủ đầu tư. Chủ đầu tư tổ chức đối chiếu tài liệu, thương thảo hợp đồng (nếu có) trên cơ sở báo cáo đánh giá của tổ chuyên gia.
+
+Tổ thẩm định (đơn vị được giao thẩm định) thực hiện thẩm định kết quả lựa chọn nhà thầu trên cơ sở báo cáo đánh giá của tổ chuyên gia, biên bản đối chiếu tài liệu, biên bản thương thảo hợp đồng (nếu có).
+
+2. Chủ đầu tư phê duyệt kết quả lựa chọn nhà thầu theo Phụ lục 5 ban hành kèm theo Thông tư này trên cơ sở báo cáo đánh giá E-HSDT, biên bản đối chiếu tài liệu, biên bản thương thảo hợp đồng và báo cáo thẩm định kết quả lựa chọn nhà thầu (nếu có).
+
+## Điều 32. Hợp đồng điện tử
+
+1. Hợp đồng của gói thầu áp dụng đấu thầu rộng rãi, đấu thầu hạn chế, chào hàng cạnh tranh, chào giá trực tuyến, mua sắm trực tuyến quy định tại khoản 2 Điều 1 của Thông tư này mà việc thanh toán hợp đồng được thực hiện qua Kho bạc nhà nước phải được ký kết trên Hệ thống theo quy định tại điểm i khoản 2 Điều 50 của Luật Đấu thầu. Khuyến khích áp dụng hợp đồng điện tử đối với gói thầu áp dụng hình thức đặt hàng, chỉ định thầu, mua sắm trực tiếp, đàm phán giá, lựa chọn nhà thầu trong trường hợp đặc biệt, gói thầu có sự tham gia của cộng đồng, lựa chọn tư vấn cá nhân theo quy trình rút gọn và gói thầu mà việc thanh toán hợp đồng không được thực hiện qua Kho bạc nhà nước.
+
+2. Tài liệu hợp đồng điện tử là một phần của hồ sơ hợp đồng quy định tại Điều 65 của Luật Đấu thầu và được các bên ký số bao gồm:
+
+a) Văn bản hợp đồng;
+
+b) Điều kiện cụ thể của hợp đồng được điền đầy đủ toàn bộ nội dung và bao gồm cả các nội dung hiệu chỉnh, bổ sung, làm rõ trong quá trình lựa chọn nhà thầu, thương thảo hợp đồng, hoàn thiện hợp đồng (nếu có);
+
+c) Phụ lục hợp đồng gồm danh mục chi tiết về phạm vi công việc, biểu giá, tiến độ thực hiện (nếu có);
+
+d) Tài liệu khác (nếu có).
+
+3. Trừ trường hợp đấu thầu rộng rãi, đấu thầu hạn chế, chào hàng cạnh tranh, chào giá trực tuyến theo quy trình thông thường, tài liệu hợp đồng điện tử có thể chỉ bao gồm một hoặc một số tài liệu quy định tại khoản 2 Điều này.
+
+4. Văn bản hợp đồng được lập theo Mẫu hợp đồng điện tử trong E-HSMT quy định tại Thông tư này hoặc quy định pháp luật có liên quan. Chủ đầu tư được chỉnh sửa, bổ sung các nội dung trong các mẫu hợp đồng điện tử trong E-HSMT để phù hợp với quy mô, tính chất của gói thầu. Trường hợp E-ĐKCT đã được điền đầy đủ toàn bộ nội dung và bao gồm cả các nội dung hiệu chỉnh, bổ sung, làm rõ trong quá trình lựa chọn nhà thầu, thương thảo hợp đồng, hoàn thiện hợp đồng (nếu có) thì các nội dung này không phải đưa vào văn bản hợp đồng để tránh trùng lặp.
+
+# Chương IV TỔ CHỨC THỰC HIỆN
+
+## Điều 33. Sửa đổi, bổ sung một số điều của Thông tư số 05/2024/TT-BKHĐT ngày 19 tháng 4 năm 2024 của Bộ trưởng Bộ Kế hoạch và Đầu tư quy định về quản lý và sử dụng các chi phí trong lựa chọn nhà thầu, nhà đầu tư trên Hệ thống mạng đấu thầu quốc gia
+
+1. Sửa đổi, bổ sung Điều 4 như sau:
+
+“**Điều 4. Mức thu các loại chi phí**
+
+1. Chi phí duy trì tên và hồ sơ năng lực của nhà thầu trên Hệ thống thực hiện theo quy định tại điểm a khoản 9 Điều 14 của Nghị định số 214/2025/NĐ-CP.
+
+Chi phí trong lựa chọn nhà đầu tư trên Hệ thống thực hiện theo quy định tại Nghị định của Chính phủ quy định chi tiết một số điều và biện pháp thi hành Luật Đầu tư theo phương thức đối tác công tư.
+
+2. Chi phí nộp hồ sơ dự thầu trên Hệ thống thực hiện theo quy định tại điểm b khoản 9 Điều 14 của Nghị định số 214/2025/NĐ-CP.
+
+3. Chi phí đối với nhà thầu trúng thầu của gói thầu đấu thầu rộng rãi, đấu thầu hạn chế, chào hàng cạnh tranh, chào giá trực tuyến theo quy trình thông thường áp dụng đấu thầu qua mạng thực hiện theo quy định tại điểm c khoản 9 Điều 14 của Nghị định số 214/2025/NĐ-CP.
+
+4. Chi phí kết nối chức năng bảo lãnh dự thầu điện tử giữa Hệ thống với các tổ chức tín dụng trong nước, chi nhánh ngân hàng nước ngoài được thành lập theo pháp luật Việt Nam, doanh nghiệp bảo hiểm phi nhân thọ trong nước, chi nhánh doanh nghiệp bảo hiểm phi nhân thọ nước ngoài được thành lập theo pháp luật Việt Nam thực hiện theo quy định tại điểm d khoản 9 Điều 14 của Nghị định số 214/2025/NĐ-CP.”
+
+2. Sửa đổi, bổ sung khoản 3 Điều 7 như sau:
+
+“3. Tổ chức lập, phê duyệt, điều chỉnh kế hoạch, quyết toán thu chi hằng năm:
+
+a) Trung tâm Đấu thầu qua mạng quốc gia lập kế hoạch thu và kế hoạch chi liên quan đến lựa chọn nhà thầu, nhà đầu tư trên Hệ thống theo các nội dung tại Phụ lục I ban hành kèm theo Thông tư này trình Hội đồng quản lý Trung tâm Đấu thầu qua mạng quốc gia (sau đây gọi là Hội đồng quản lý) phê duyệt hoặc báo cáo, xin ý kiến Cục Quản lý đấu thầu trước khi Giám đốc Trung tâm Đấu thầu qua mạng quốc gia phê duyệt (trong trường hợp Trung tâm Đấu thầu qua mạng quốc gia chưa thành lập Hội đồng quản lý);
+
+b) Trường hợp phát sinh nhiệm vụ, Trung tâm Đấu thầu qua mạng quốc gia điều chỉnh các khoản thu, chi tại Phụ lục I ban hành kèm theo Thông tư này trình Hội đồng quản lý phê duyệt hoặc báo cáo, xin ý kiến Cục Quản lý đấu thầu trước khi Giám đốc Trung tâm Đấu thầu qua mạng quốc gia phê duyệt (trong trường hợp Trung tâm Đấu thầu qua mạng quốc gia chưa thành lập Hội đồng quản lý)
+
+c) Trung tâm Đấu thầu qua mạng quốc gia có trách nhiệm lập quyết toán thu, chi theo các nội dung tại Phụ lục II ban hành kèm theo Thông tư này và quyết toán theo quy định.”.
+
+3. Sửa đổi, bổ sung điểm a khoản 2 Điều 8 như sau:
+
+“a) Có ý kiến đối với kế hoạch thu và kế hoạch chi hằng năm của Trung tâm Đấu thầu qua mạng quốc gia (trong trường hợp Trung tâm Đấu thầu qua mạng quốc gia chưa thành lập Hội đồng quản lý) theo quy định tại điểm a khoản 3 Điều 7 của Thông tư này;”.
+
+4. Bổ sung điểm c1 vào sau điểm c khoản 3 Điều 8 như sau:
+
+“c1) Phê duyệt, điều chỉnh kế hoạch thu và kế hoạch chi hằng năm của Trung tâm Đấu thầu qua mạng quốc gia (trong trường hợp Trung tâm Đấu thầu qua mạng quốc gia chưa thành lập Hội đồng quản lý) theo quy định tại điểm a khoản 3 Điều 7 của Thông tư này.”.
+
+## Điều 34. Điều khoản chuyển tiếp
+
+1. Các gói thầu đã phát hành hồ sơ mời quan tâm, hồ sơ mời sơ tuyển, hồ sơ mời thầu, E-HSMQT, E-HSMST, E-HSMT trước ngày 01 tháng 7 năm 2025 nhưng đến ngày Thông tư này có hiệu lực chưa đóng thầu thì chủ đầu tư xem xét, quyết định lựa chọn theo một trong hai cách như sau:
+
+a) Tiếp tục tổ chức lựa chọn danh sách ngắn, lựa chọn nhà thầu, ký kết và quản lý thực hiện hợp đồng theo quy định của Luật Đấu thầu số 22/2023/QH15 đã được sửa đổi, bổ sung một số điều theo Luật số 57/2024/QH15, Nghị định số 24/2024/NĐ-CP được sửa đổi, bổ sung bởi Nghị định số 17/2025/NĐ-CP và các văn bản quy định chi tiết, hướng dẫn thi hành.
+
+b) Hủy thông báo mời quan tâm, thông báo mời sơ tuyển, thông báo mời thầu E-TBMQT, E-TBMST, E-TBMT và được điều chỉnh, sửa đổi kế hoạch lựa chọn nhà thầu (nếu cần thiết), hồ sơ mời quan tâm, hồ sơ mời sơ tuyển, hồ sơ mời thầu E-HSMQT, E-HSMST, E-HSMT để tổ chức lựa chọn nhà thầu theo quy định của Luật Đấu thầu số 22/2023/QH15 đã được sửa đổi, bổ sung một số điều theo Luật số 57/2024/QH15, Luật số 90/2025/QH15, Nghị định số 214/2025/NĐ-CP và Thông tư này, trừ quy định tại điểm d khoản 1 Điều 10 của Luật số 90/2025/QH15.
+
+2. Các gói thầu đã phát hành hồ sơ mời quan tâm, hồ sơ mời sơ tuyển, hồ sơ mời thầu, E-HSMQT, E-HSMST, E-HSMT trước ngày 01 tháng 7 năm 2025 và mở thầu trước ngày 04 tháng 8 năm 2025 thì tiếp tục tổ chức lựa chọn danh sách ngắn, lựa chọn nhà thầu, ký kết và quản lý thực hiện hợp đồng theo quy định của Luật Đấu thầu số 22/2023/QH15 được sửa đổi, bổ sung bởi Luật số 57/2024/QH15, Nghị định số 24/2024/NĐ-CP được sửa đổi, bổ sung bởi Nghị định số 17/2025/NĐ-CP và các văn bản quy định chi tiết, hướng dẫn thi hành.
+
+3. Các gói thầu đã phát hành hồ sơ mời quan tâm, hồ sơ mời sơ tuyển, hồ sơ mời thầu, E-HSMQT, E-HSMST, E-HSMT từ ngày 01 tháng 7 năm 2025 trở đi và trước ngày Thông tư này có hiệu lực thi hành, việc lựa chọn danh sách ngắn, lựa chọn nhà thầu, ký kết và quản lý thực hiện hợp đồng thực hiện theo quy định của Luật Đấu thầu số 22/2023/QH15 đã được sửa đổi, bổ sung một số điều theo Luật số 57/2024/QH15, Luật số 90/2025/QH15 (sau đây gọi là Luật Đấu thầu sửa đổi năm 2025), các nội dung của Nghị định số 24/2024/NĐ-CP (được sửa đổi, bổ sung tại Nghị định số 17/2025/NĐ-CP), các văn bản hướng dẫn còn phù hợp với quy định của Luật Đấu thầu sửa đổi năm 2025.
+
+4. Trường hợp thay đổi hình thức lựa chọn nhà thầu từ không qua mạng thành qua mạng thì chủ đầu tư không phải phê duyệt điều chỉnh kế hoạch lựa chọn nhà thầu mà tiến hành chỉnh sửa hình thức lựa chọn nhà thầu trên Hệ thống từ không qua mạng thành qua mạng. Quy trình chỉnh sửa thực hiện theo _Hướng dẫn sử dụng_.
+
+## Điều 35. Hiệu lực thi hành
+
+1. Thông tư này có hiệu lực thi hành kể từ ngày 04 tháng 8 năm 2025, trừ trường hợp đối với chào giá trực tuyến gói thầu xây lắp theo quy trình rút gọn được thực hiện trên Hệ thống kể từ ngày 01 tháng 9 năm 2025.
+
+2. Kể từ ngày Thông tư này có hiệu lực thi hành, Thông tư số 22/2024/TT-BKHĐT hết hiệu lực thi hành.
+
+3. Trường hợp các thôngquan trọng trong quá trình lựa chọn nhà thầu cần bảo mật và không thể công khai trên Hệ thống, chủ đầu tư quyết định việc đăng tải thông tin trong quá trình lựa chọn nhà thầu.
+
+4. Trường hợp gói thầu đặc thù mà nếu áp dụng tiêu chuẩn đánh giá về doanh thu, hợp đồng tương tự của Mẫu E-HSMST, E-HSMQT, E-HSMT ban hành kèm theo Thông tư này sẽ có ít hơn 03 nhà thầu đáp ứng yêu cầu về doanh thu bình quân hằng năm, hợp đồng tương tự thì chủ đầu tư được chỉnh sửa các yêu cầu này theo nguyên tắc sau:
+
+a) Việc chỉnh sửa yêu cầu về doanh thu bình quân hằng năm, hợp đồng tương tự khác với quy định của các Mẫu E-HSMST, E-HSMQT, E-HSMT phải bảo đảm việc phân chia gói thầu là hợp lý, quy mô gói thầu không quá lớn để hạn chế cạnh tranh;
+
+b) Khi trình phê duyệt E-HSMST, E-HSMQT, E-HSMT, tổ chuyên gia phải nêu rõ việc chỉnh sửa E-HSMST, E-HSMQT, E-HSMT trong tờ trình để chủ đầu tư xem xét;
+
+c) Trong mọi trường hợp, chủ đầu tư phải bảo đảm không làm hạn chế sự tham gia của nhà thầu; nhà thầu được lựa chọn có đủ năng lực, kinh nghiệm để thực hiện gói thầu.
+
+5. Kể từ ngày Thông tư này có hiệu lực thi hành, khi lập hồ sơ mời thầu đối với lựa chọn nhà thầu không qua mạng, việc lập hồ sơ mời thầu được thực hiện như sau:
+
+a) Đối với gói thầu mua sắm hàng hóa, xây lắp, dịch vụ tư vấn, dịch vụ phi tư vấn áp dụng hình thức đấu thầu quốc tế, chủ đầu tư chỉnh sửa các Mẫu hồ sơ mời thầu ban hành kèm theo các Thông tư hướng dẫn thực hiện Nghị định quy định về đấu thầu mua sắm theo Hiệp định Đối tác Toàn diện và Tiến bộ xuyên Thái Bình Dương, Hiệp định Thương mại tự do giữa Cộng hòa xã hội chủ nghĩa Việt Nam và Liên minh Châu Âu, Hiệp định Thương mại tự do giữa Việt Nam và Liên hiệp Vương quốc Anh và Bắc Ai-len trên cơ sở bảo đảm không trái với quy định của Luật Đấu thầu, Nghị định số 214/2025/NĐ-CP;
+
+b) Đối với gói thầu mua sắm hàng hóa, xây lắp, dịch vụ tư vấn, dịch vụ phi tư vấn, hỗn hợp áp dụng hình thức đấu thầu trong nước, chủ đầu tư chỉnh sửa các Mẫu E-HSMT ban hành kèm theo Thông tư này trên cơ sở bảo đảm không trái với quy định của Luật Đấu thầu, Nghị định số 214/2025/NĐ-CP và phù hợp với cách thức tổ chức lựa chọn nhà thầu không qua mạng.
+
+6. Hằng năm, Bộ Tài chính hướng dẫn việc cung cấp, đăng tải thông tin về đấu thầu trên Hệ thống phù hợp với lịch nghỉ lễ, Tết theo thông báo của Bộ Nội vụ.
+
+7. Việc chỉnh sửa các biểu mẫu dưới dạng webform trên Hệ thống thực hiện theo quy định tại điểm đ khoản 1 Điều 146 của Nghị định số 214/2025/NĐ-CP.
+
+8. Trong quá trình thực hiện, nếu có vướng mắc, các Bộ, cơ quan ngang Bộ, cơ quan thuộc Chính phủ, cơ quan khác ở Trung ương, Ủy ban nhân dân các cấp, các tập đoàn kinh tế nhà nước, các tổng công ty nhà nước và tổ chức, cá nhân có liên quan gửi ý kiến về Bộ Tài chính để kịp thời hướng dẫn./.
