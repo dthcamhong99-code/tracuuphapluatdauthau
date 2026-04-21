@@ -5,6 +5,7 @@ import { DOCUMENTS, allLawArticles } from './data/lawData';
 import { nghiDinh214Data, allNd214Articles } from './data/nd214';
 import { thongTu79Data, allTt79Articles } from './data/tt79';
 import { Chapter, Article, DocumentData } from './types';
+import logoImg from '../public/1111.jpg';
 
 function DocumentPane({
   docData,
@@ -527,7 +528,7 @@ export default function App() {
               <div className="absolute inset-0 rounded-full border border-amber-500/30 scale-110 pointer-events-none" />
               
               <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden relative border border-slate-200 shadow-sm">
-                <img src={`${import.meta.env.BASE_URL}1111.jpg`} alt="Logo" className="w-[100%] h-[100%] origin-center object-cover" />
+                <img src={logoImg} alt="Logo" className="w-[100%] h-[100%] origin-center object-cover" />
               </div>
             </div>
             
