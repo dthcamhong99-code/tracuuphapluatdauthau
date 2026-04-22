@@ -5,7 +5,7 @@ import { DOCUMENTS, allLawArticles } from './data/lawData';
 import { nghiDinh214Data, allNd214Articles } from './data/nd214';
 import { thongTu79Data, allTt79Articles } from './data/tt79';
 import { Chapter, Article, DocumentData } from './types';
-import logoImg from '../public/1111.jpg';
+import logoImg from './1111.jpg';
 
 function DocumentPane({
   docData,
