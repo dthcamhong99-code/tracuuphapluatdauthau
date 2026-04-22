@@ -382,7 +382,7 @@ export default function App() {
   const [isBookmarksExpanded, setIsBookmarksExpanded] = useState(false);
 
   // Sidebar Resizing
-  const [sidebarWidth, setSidebarWidth] = useState(200);
+  const [sidebarWidth, setSidebarWidth] = useState(230);
   const [isResizing, setIsResizing] = useState(false);
 
   const startResizing = useCallback(() => {
@@ -396,7 +396,7 @@ export default function App() {
   const resize = useCallback((mouseMoveEvent: MouseEvent) => {
     if (isResizing) {
       const newWidth = mouseMoveEvent.clientX;
-      if (newWidth >= 160 && newWidth <= 400) {
+      if (newWidth >= 220 && newWidth <= 500) {
         setSidebarWidth(newWidth);
       }
     }
@@ -532,7 +532,7 @@ export default function App() {
               </div>
             </div>
             
-            <h1 className="font-bold text-lg xl:text-xl leading-snug text-ink-900 tracking-tight flex-1 whitespace-nowrap">Luật đấu thầu</h1>
+            <h1 className="font-bold text-[15px] leading-snug text-ink-900 tracking-tight flex-1 whitespace-nowrap">Luật đấu thầu</h1>
             
             <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden p-2 hover:bg-ink-900/5 rounded-full shrink-0">
               <X size={18} />
