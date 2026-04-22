@@ -130,13 +130,13 @@ function DocumentPane({
                     >
                       <div 
                         onClick={() => handleToggle(art.id)}
-                        className={`w-full text-left cursor-pointer p-3 lg:p-4 flex items-center justify-between gap-4 transition-colors rounded-xl ${expandedArticleId === art.id ? 'bg-deep-yellow text-white sticky top-0 z-20 shadow-xl' : 'hover:bg-cream-50'}`}
+                        className={`w-full text-left cursor-pointer p-3 lg:p-4 flex items-center justify-between gap-4 transition-colors rounded-xl ${expandedArticleId === art.id ? 'bg-yellow-400 text-slate-900 sticky top-0 z-20 shadow-xl shadow-yellow-400/40' : 'hover:bg-cream-50'}`}
                       >
                         <div className="flex items-center gap-4">
-                          <div className={`font-bold px-2 py-0.5 border rounded-md transition-all shrink-0 whitespace-nowrap ${expandedArticleId === art.id ? 'border-amber-200/50 bg-amber-500/20 text-white' : 'border-slate-200 text-ink-800'} text-xs lg:text-sm tracking-tight`}>
+                          <div className={`font-bold px-2 py-0.5 border rounded-md transition-all shrink-0 whitespace-nowrap ${expandedArticleId === art.id ? 'border-slate-900/50 bg-yellow-400 text-slate-900 shadow-sm' : 'border-slate-200 text-ink-800'} text-xs lg:text-sm tracking-tight`}>
                             Điều {art.id.split('D')[1]}
                           </div>
-                          <h2 className={`font-bold text-xs lg:text-sm tracking-tight ${expandedArticleId === art.id ? 'text-white' : 'text-ink-900'} leading-snug line-clamp-2`}>
+                          <h2 className={`font-bold text-xs lg:text-sm tracking-tight ${expandedArticleId === art.id ? 'text-slate-900' : 'text-ink-900'} leading-snug line-clamp-2`}>
                             {highlightMatch(art.title.split('.')[1]?.trim() || art.title, searchQuery)}
                           </h2>
                         </div>
@@ -146,11 +146,11 @@ function DocumentPane({
                               e.stopPropagation();
                               onToggleBookmark(art.id, art.title);
                             }}
-                            className={`p-1.5 rounded-full hover:bg-black/10 transition-colors ${bookmarkedIds.includes(art.id) ? (expandedArticleId === art.id ? 'text-rose-200' : 'text-rose-500') : (expandedArticleId === art.id ? 'text-white/70 hover:text-white' : 'text-slate-300 hover:text-slate-500')}`}
+                            className={`p-1.5 rounded-full hover:bg-black/10 transition-colors ${bookmarkedIds.includes(art.id) ? (expandedArticleId === art.id ? 'text-rose-600' : 'text-rose-500') : (expandedArticleId === art.id ? 'text-slate-900/60 hover:text-slate-900' : 'text-slate-300 hover:text-slate-500')}`}
                           >
                             <Bookmark size={16} fill={bookmarkedIds.includes(art.id) ? 'currentColor' : 'none'} />
                           </button>
-                          <ChevronDown size={20} className={`transition-transform duration-300 shrink-0 ${expandedArticleId === art.id ? 'rotate-180 text-white' : 'text-slate-300'}`} />
+                          <ChevronDown size={20} className={`transition-transform duration-300 shrink-0 ${expandedArticleId === art.id ? 'rotate-180 text-slate-900' : 'text-slate-300'}`} />
                         </div>
                       </div>
 
@@ -222,13 +222,13 @@ function DocumentPane({
                   <div key={art.id} id={`${docData.id}-art-${art.id}`} className="scroll-mt-20 bg-white rounded-xl border border-ink-900/5 shadow-sm hover:shadow-md transition-all duration-300 overflow-visible mb-4 last:mb-0">
                     <div 
                       onClick={() => onToggleArticle(art.id)}
-                      className={`w-full text-left cursor-pointer p-2.5 lg:py-3 lg:px-4 flex items-center justify-between gap-3 transition-colors rounded-xl ${expandedArticleId === art.id ? 'bg-deep-yellow sticky top-0 z-20 shadow-xl' : 'hover:bg-cream-50'}`}
+                      className={`w-full text-left cursor-pointer p-2.5 lg:py-3 lg:px-4 flex items-center justify-between gap-3 transition-colors rounded-xl ${expandedArticleId === art.id ? 'bg-yellow-400 text-slate-900 sticky top-0 z-20 shadow-xl shadow-yellow-400/40' : 'hover:bg-cream-50'}`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className={`font-bold px-2 py-0.5 border rounded-md transition-all shrink-0 whitespace-nowrap ${expandedArticleId === art.id ? 'border-amber-200/50 bg-amber-500/20 text-white' : 'border-slate-200 text-ink-800'} text-xs lg:text-sm tracking-tight`}>
+                        <div className={`font-bold px-2 py-0.5 border rounded-md transition-all shrink-0 whitespace-nowrap ${expandedArticleId === art.id ? 'border-slate-900/50 bg-yellow-400 text-slate-900 shadow-sm' : 'border-slate-200 text-ink-800'} text-xs lg:text-sm tracking-tight`}>
                           Điều {art.id.split('D')[1]}
                         </div>
-                        <h2 className={`font-bold text-xs lg:text-sm tracking-tight ${expandedArticleId === art.id ? 'text-white' : 'text-ink-900'} line-clamp-2 leading-snug`}>
+                        <h2 className={`font-bold text-xs lg:text-sm tracking-tight ${expandedArticleId === art.id ? 'text-slate-900' : 'text-ink-900'} line-clamp-2 leading-snug`}>
                           {art.title.split('.')[1]?.trim() || art.title}
                         </h2>
                       </div>
@@ -238,11 +238,11 @@ function DocumentPane({
                             e.stopPropagation();
                             onToggleBookmark(art.id, art.title);
                           }}
-                          className={`p-1.5 rounded-full hover:bg-black/10 transition-colors ${bookmarkedIds.includes(art.id) ? (expandedArticleId === art.id ? 'text-rose-200' : 'text-rose-500') : (expandedArticleId === art.id ? 'text-white/70 hover:text-white' : 'text-slate-300 hover:text-slate-500')}`}
+                          className={`p-1.5 rounded-full hover:bg-black/10 transition-colors ${bookmarkedIds.includes(art.id) ? (expandedArticleId === art.id ? 'text-rose-600' : 'text-rose-500') : (expandedArticleId === art.id ? 'text-slate-900/60 hover:text-slate-900' : 'text-slate-300 hover:text-slate-500')}`}
                         >
                           <Bookmark size={16} fill={bookmarkedIds.includes(art.id) ? 'currentColor' : 'none'} />
                         </button>
-                        <ChevronDown size={18} className={`transition-transform duration-300 shrink-0 ${expandedArticleId === art.id ? 'rotate-180 text-white' : 'text-slate-400'}`} />
+                        <ChevronDown size={18} className={`transition-transform duration-300 shrink-0 ${expandedArticleId === art.id ? 'rotate-180 text-slate-900' : 'text-slate-400'}`} />
                       </div>
                     </div>
 
@@ -492,7 +492,7 @@ export default function App() {
   };
 
   return (
-    <div className={`flex h-screen bg-slate-200/60 font-sans text-ink-900 overflow-hidden ${isResizing ? 'select-none cursor-col-resize' : ''}`} id="app-container">
+    <div className={`flex h-screen bg-white font-sans text-ink-900 overflow-hidden ${isResizing ? 'select-none cursor-col-resize' : ''}`} id="app-container">
       {/* Mobile Sidebar Overlay */}
       <AnimatePresence>
         {isSidebarOpen && (
@@ -664,7 +664,7 @@ export default function App() {
                                   onClick={() => handleSelectLuat(chapter.id)}
                                   className={`w-full text-left px-2 py-2 rounded-xl text-[11px] transition-all duration-300 flex items-center gap-2 group relative ${
                                     isSelected && !effectiveLuatSearch
-                                      ? 'bg-deep-yellow text-white font-bold shadow-lg shadow-deep-yellow/20'
+                                      ? 'bg-yellow-400 text-slate-900 font-bold shadow-md shadow-yellow-400/40'
                                       : 'text-ink-800 hover:bg-ink-900/5 font-semibold'
                                   }`}
                                 >
@@ -674,7 +674,7 @@ export default function App() {
                                   >
                                     <ChevronRight 
                                       size={12} 
-                                      className={`transition-transform duration-300 ${isSelected ? 'text-white' : 'text-slate-400'} ${isExpanded ? 'rotate-90' : ''} ${!hasSections ? 'opacity-0' : ''}`} 
+                                      className={`transition-transform duration-300 ${isSelected ? 'text-slate-900' : 'text-slate-400'} ${isExpanded ? 'rotate-90' : ''} ${!hasSections ? 'opacity-0' : ''}`} 
                                     />
                                   </div>
                                   <span className="text-[11px] tracking-tight leading-snug whitespace-normal break-words py-0.5">{chapter.title.split(':')[0] || chapter.title}</span>
@@ -780,7 +780,7 @@ export default function App() {
                                   onClick={() => handleSelectNd(chapter.id)}
                                   className={`w-full text-left px-2 py-2 rounded-xl text-[11px] transition-all duration-300 flex items-center gap-2 group relative ${
                                     isSelected && !effectiveNdSearch
-                                      ? 'bg-deep-yellow text-white font-bold shadow-lg shadow-deep-yellow/20'
+                                      ? 'bg-yellow-400 text-slate-900 font-bold shadow-md shadow-yellow-400/40'
                                       : 'text-ink-800 hover:bg-ink-900/5 font-semibold'
                                   }`}
                                 >
@@ -860,7 +860,7 @@ export default function App() {
                                   onClick={() => handleSelectTt(chapter.id)}
                                   className={`w-full text-left px-2 py-2 rounded-xl text-[11px] transition-all duration-300 flex items-center gap-2 group relative ${
                                     isSelected && !effectiveTtSearch
-                                      ? 'bg-deep-yellow text-white font-bold shadow-lg shadow-deep-yellow/20'
+                                      ? 'bg-yellow-400 text-slate-900 font-bold shadow-md shadow-yellow-400/40'
                                       : 'text-ink-800 hover:bg-ink-900/5 font-semibold'
                                   }`}
                                 >
@@ -972,9 +972,6 @@ export default function App() {
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-        {/* Subtle background texture/overlay */}
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/rice-paper-2.png')] opacity-20 pointer-events-none" />
-
         <header 
           className="shrink-0 bg-cream-100 backdrop-blur-xl border-b border-ink-900/5 p-4 lg:py-4 lg:px-6 flex items-center gap-4 lg:gap-6 z-30 relative overflow-hidden"
         >
@@ -1049,35 +1046,35 @@ export default function App() {
 
         {/* View Switcher */}
         <div className="flex items-center justify-center pt-2 pb-1 lg:pt-3 lg:pb-0 shrink-0 z-20">
-          <div className="flex items-center gap-1.5 bg-white border border-ink-900/10 p-1 rounded-xl shadow-sm overflow-x-auto no-scrollbar max-w-full mx-4 lg:mx-0">
+          <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 p-1.5 rounded-xl shadow-lg overflow-x-auto no-scrollbar max-w-full mx-4 lg:mx-0">
              <button
                 onClick={() => togglePane('luat')}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${activePanes.includes('luat') ? 'bg-deep-yellow text-white shadow-sm shadow-deep-yellow/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'}`}
+                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 border border-transparent ${activePanes.includes('luat') ? 'bg-yellow-400 text-slate-900 shadow-md shadow-yellow-400/20' : 'bg-white text-slate-400 hover:text-slate-500 border-white/10'}`}
              >
-                <Gavel size={12} className={activePanes.includes('luat') ? 'text-white' : 'text-slate-400'} />
+                <Gavel size={12} className={activePanes.includes('luat') ? 'text-slate-900' : 'text-slate-400'} />
                 Luật Đấu Thầu
              </button>
              <button
                 onClick={() => togglePane('nd214')}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${activePanes.includes('nd214') ? 'bg-deep-yellow text-white shadow-sm shadow-deep-yellow/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'}`}
+                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 border border-transparent ${activePanes.includes('nd214') ? 'bg-yellow-400 text-slate-900 shadow-md shadow-yellow-400/20' : 'bg-white text-slate-400 hover:text-slate-500 border-white/10'}`}
              >
-                <ScrollText size={12} className={activePanes.includes('nd214') ? 'text-white' : 'text-slate-400'} />
+                <ScrollText size={12} className={activePanes.includes('nd214') ? 'text-slate-900' : 'text-slate-400'} />
                 Nghị định 214
              </button>
              <button
                 onClick={() => togglePane('tt79')}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${activePanes.includes('tt79') ? 'bg-deep-yellow text-white shadow-sm shadow-deep-yellow/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'}`}
+                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 border border-transparent ${activePanes.includes('tt79') ? 'bg-yellow-400 text-slate-900 shadow-md shadow-yellow-400/20' : 'bg-white text-slate-400 hover:text-slate-500 border-white/10'}`}
              >
-                <BookOpen size={12} className={activePanes.includes('tt79') ? 'text-white' : 'text-slate-400'} />
+                <BookOpen size={12} className={activePanes.includes('tt79') ? 'text-slate-900' : 'text-slate-400'} />
                 Thông tư 79
              </button>
 
              {(activePanes.length < 3 || activePanes.length === 0) && (
                <>
-                  <div className="w-px h-4 bg-slate-200 mx-1"></div>
+                  <div className="w-px h-4 bg-slate-700 mx-1"></div>
                   <button
                      onClick={() => setActivePanes(['luat', 'nd214', 'tt79'])}
-                     className="px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+                     className="px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 bg-white text-slate-400 hover:text-slate-500 border border-white/10"
                   >
                      <Menu size={12} className="text-slate-400" />
                      Quay lại mặc định
