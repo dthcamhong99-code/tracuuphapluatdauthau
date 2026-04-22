@@ -6,7 +6,10 @@ import {defineConfig, loadEnv} from 'vite';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
-    base: '/tracuuphapluatdauthau/',
+    base: './',
+    build: {
+      assetsInlineLimit: 1048576, // 1MB limit to ensure the 374KB image is inlined
+    },
     plugins: [
       react(), 
       tailwindcss(),
