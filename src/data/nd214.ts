@@ -95,7 +95,7 @@ export function parseNghiDinh(text: string): DocumentData {
 
   return {
     id: 'nd214',
-    title: 'Nghị định 214/2024/NĐ-CP',
+    title: 'Nghị định 214/2025/NĐ-CP',
     shortTitle: 'NĐ 214',
     chapters
   };

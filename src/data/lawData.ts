@@ -112,7 +112,7 @@ function parseLawData(text: string, prefix: string): Chapter[] {
 export const LAW_DATA: Chapter[] = parseLawData(FULL_TEXT, "luat");
 
 export const DOCUMENTS: DocumentData[] = [
-  { id: 'luat', title: 'Luật Đấu Thầu Số 22/2023/QH15', shortTitle: 'Luật Đấu Thầu', chapters: LAW_DATA }
+  { id: 'luat', title: 'VBHN Luật đấu thầu 74/VBHN-VPQH', shortTitle: 'Luật Đấu Thầu', chapters: LAW_DATA }
 ];
 
 const _allLawArticles: Article[] = [];
