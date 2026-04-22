@@ -523,16 +523,16 @@ export default function App() {
 
         <div className="p-4 border-b border-ink-900/5 flex flex-col gap-3">
           <div className="flex items-center gap-3">
-            <div className="relative w-10 h-10 flex items-center justify-center shrink-0 group">
-              <div className="absolute inset-0 rounded-full border-2 border-red-900/20 scale-[1.18] pointer-events-none" />
-              <div className="absolute inset-0 rounded-full border border-amber-500/30 scale-110 pointer-events-none" />
+            <div className="relative w-16 h-16 flex items-center justify-center shrink-0 group">
+              <div className="absolute inset-0 rounded-full border-2 border-red-900/20 scale-[1.10] pointer-events-none" />
+              <div className="absolute inset-0 rounded-full border border-amber-500/30 scale-105 pointer-events-none" />
               
-              <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden relative border border-slate-200 shadow-sm">
-                <img src={logoImg} alt="Logo" className="w-[100%] h-[100%] origin-center object-cover" />
+              <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden relative shadow-md">
+                <img src={logoImg} alt="Logo" className="w-full h-full object-cover" />
               </div>
             </div>
             
-            <h1 className="font-bold text-lg leading-none text-ink-900 tracking-tight flex-1">Luật đấu thầu</h1>
+            <h1 className="font-bold text-lg xl:text-xl leading-snug text-ink-900 tracking-tight flex-1 whitespace-nowrap">Luật đấu thầu</h1>
             
             <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden p-2 hover:bg-ink-900/5 rounded-full shrink-0">
               <X size={18} />
