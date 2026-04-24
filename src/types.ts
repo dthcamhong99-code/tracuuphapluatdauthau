@@ -24,3 +24,11 @@ export interface DocumentData {
   shortTitle: string;
   chapters: Chapter[];
 }
+
+export interface UserNote {
+  id: string;
+  articleId: string;
+  text: string;
+  note: string;
+  color: string; // e.g. '#fef08a'
+}

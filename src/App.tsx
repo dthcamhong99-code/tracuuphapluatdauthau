@@ -1,10 +1,10 @@
-import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
-import { Search, ChevronRight, Gavel, BookOpen, AlertCircle, Info, Menu, X, ArrowLeft, Filter, ChevronDown, Scale, ScrollText, Snowflake, Download, Bookmark } from 'lucide-react';
+import { useState, useMemo, useRef, useCallback, useEffect, useDeferredValue } from 'react';
+import { Search, ChevronRight, Gavel, BookOpen, AlertCircle, Info, Menu, X, ArrowLeft, Filter, ChevronDown, Scale, ScrollText, Snowflake, Download, Bookmark, MessageCircleHeart, Pencil } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { DOCUMENTS, allLawArticles } from './data/lawData';
 import { nghiDinh214Data, allNd214Articles } from './data/nd214';
 import { thongTu79Data, allTt79Articles } from './data/tt79';
-import { Chapter, Article, DocumentData } from './types';
+import { Chapter, Article, DocumentData, UserNote } from './types';
 import { logoBase64 } from './logoData';
 
 function DocumentPane({
@@ -18,7 +18,9 @@ function DocumentPane({
   onClearSearch,
   isSidebarOpen,
   bookmarkedIds,
-  onToggleBookmark
+  onToggleBookmark,
+  userNotes,
+  onNoteClick
 }: {
   docData: DocumentData;
   allArticles: Article[];
@@ -31,18 +33,21 @@ function DocumentPane({
   isSidebarOpen: boolean;
   bookmarkedIds: string[];
   onToggleBookmark: (id: string, title: string) => void;
+  userNotes: UserNote[];
+  onNoteClick: (text: string, articleId: string, noteId?: string) => void;
 }) {
   const isLuat = docData.id === 'luat';
   const contentRef = useRef<HTMLDivElement>(null);
+  const deferredSearchQuery = useDeferredValue(searchQuery);
 
   const filteredArticles = useMemo(() => {
-    if (!searchQuery.trim()) return [];
-    const query = searchQuery.toLowerCase();
+    if (!deferredSearchQuery.trim()) return [];
+    const query = deferredSearchQuery.toLowerCase();
     return allArticles.filter(art => 
       art.title.toLowerCase().includes(query) || 
       art.content.toLowerCase().includes(query)
     );
-  }, [allArticles, searchQuery]);
+  }, [allArticles, deferredSearchQuery]);
 
   const currentArticles = useMemo(() => {
     if (selectedIds.length === 0) return allArticles;
@@ -89,17 +94,90 @@ function DocumentPane({
     }
   };
 
+  const colorStyles: Record<string, string> = {
+    yellow: "bg-[#fef08a] border-[#eab308]",
+    green: "bg-[#bbf7d0] border-[#22c55e]",
+    blue: "bg-[#bfdbfe] border-[#3b82f6]",
+    pink: "bg-[#fbcfe8] border-[#ec4899]",
+    purple: "bg-[#e9d5ff] border-[#a855f7]",
+  };
+
   const highlightMatch = (text: string, query: string) => {
     if (!query.trim()) return text;
     const parts = text.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'));
     return (
-      <>
+      <span className="whitespace-pre-wrap">
         {parts.map((part, i) => 
           part.toLowerCase() === query.toLowerCase() 
             ? <mark key={i} className="bg-amber-400/40 text-ink-900 border-b-2 border-amber-500 px-0.5 rounded-sm font-black shadow-[0_0_15px_rgba(251,191,36,0.3)]">{part}</mark> 
-            : part
+            : <span key={i}>{part}</span>
         )}
-      </>
+      </span>
+    );
+  };
+
+  const renderContent = (text: string, articleId: string) => {
+    const artNotes = userNotes.filter(n => n.articleId === articleId);
+
+    if (artNotes.length === 0 && !deferredSearchQuery.trim()) {
+      return <span data-article-id={articleId}>{text}</span>;
+    }
+
+    type Token = { type: 'text' | 'note' | 'search', extText: string, note?: UserNote };
+    let tokens: Token[] = [{ type: 'text', extText: text }];
+
+    artNotes.forEach(note => {
+       if (!note.text.trim()) return;
+       const escapeContent = note.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+       const regex = new RegExp(`(${escapeContent})`, 'g');
+       
+       tokens = tokens.flatMap(el => {
+          if (el.type !== 'text') return el;
+          const parts = el.extText.split(regex);
+          return parts.map((part): Token => {
+             if (part === note.text) return { type: 'note', extText: part, note };
+             return { type: 'text', extText: part };
+          });
+       });
+    });
+
+    if (deferredSearchQuery.trim()) {
+       const escapeQuery = deferredSearchQuery.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+       const queryRegex = new RegExp(`(${escapeQuery})`, 'gi');
+       
+       tokens = tokens.flatMap(el => {
+          if (el.type !== 'text') return el;
+          const parts = el.extText.split(queryRegex);
+          return parts.map((part): Token => {
+             if (part.toLowerCase() === deferredSearchQuery.trim().toLowerCase()) return { type: 'search', extText: part };
+             return { type: 'text', extText: part };
+          });
+       });
+    }
+
+    return (
+      <span data-article-id={articleId}>
+        {tokens.map((el, i) => {
+           if (el.type === 'note' && el.note) {
+              return (
+                <mark 
+                  key={i} 
+                  className={`relative cursor-pointer group ${colorStyles[el.note.color || 'yellow']} text-ink-900 border-l-[3px] rounded-r-sm pr-1 shadow-sm inline my-0.5 leading-relaxed decoration-clone`}
+                  onClick={(e) => { e.stopPropagation(); onNoteClick(el.note!.text, articleId, el.note!.id); }}
+                >
+                  <span className="italic px-0.5">{el.extText}</span>
+                  <span className="inline-flex relative -top-3 -left-1.5 align-top z-10 p-0.5 rounded-full bg-pink-500 text-white shadow-sm ring-2 ring-white hover:scale-110 transition-transform cursor-pointer">
+                    <MessageCircleHeart size={14} />
+                  </span>
+                </mark>
+              );
+           }
+           if (el.type === 'search') {
+              return <mark key={i} className="bg-amber-400/40 text-ink-900 border-b-2 border-amber-500 px-0.5 rounded-sm font-black shadow-[0_0_15px_rgba(251,191,36,0.3)]">{el.extText}</mark>;
+           }
+           return <span key={i}>{el.extText}</span>;
+        })}
+      </span>
     );
   };
 
@@ -159,7 +237,7 @@ function DocumentPane({
                           <div className="px-5 lg:px-6 pb-6 pt-3 border-t border-ink-900/5">
                             <div className="pr-2">
                               <p className="text-ink-800 leading-relaxed text-[12px] lg:text-[13px] whitespace-pre-wrap font-sans selection:bg-deep-yellow/30 text-justify">
-                                {highlightMatch(art.content, searchQuery)}
+                                {renderContent(art.content, art.id)}
                               </p>
                             </div>
                             <div className="mt-4 pt-4 border-t border-ink-900/5 flex items-center justify-between">
@@ -181,15 +259,15 @@ function DocumentPane({
                            <div className="text-slate-500 text-xs leading-relaxed line-clamp-2 italic border-l-2 border-slate-100 pl-4 py-1 text-justify">
                               {(() => {
                                 const content = art.content;
-                                const query = searchQuery.toLowerCase();
+                                const query = deferredSearchQuery.toLowerCase();
                                 const index = content.toLowerCase().indexOf(query);
-                                if (index === -1) return highlightMatch(content.substring(0, 250) + (content.length > 250 ? '...' : ''), searchQuery);
+                                if (index === -1) return renderContent(content.substring(0, 250) + (content.length > 250 ? '...' : ''), art.id);
                                 const start = Math.max(0, index - 80);
                                 const end = Math.min(content.length, index + 150);
                                 let snippet = content.substring(start, end);
                                 if (start > 0) snippet = '...' + snippet;
                                 if (end < content.length) snippet = snippet + '...';
-                                return highlightMatch(snippet, searchQuery);
+                                return renderContent(snippet, art.id);
                               })()}
                            </div>
                            <button 
@@ -258,7 +336,7 @@ function DocumentPane({
                           <div className="px-4 lg:px-5 pb-5 pt-3 border-t border-ink-900/5">
                             <div className="pr-2">
                               <p className="text-ink-800 leading-relaxed text-[12px] lg:text-[13px] whitespace-pre-wrap font-sans selection:bg-deep-yellow/30 text-justify">
-                                {art.content}
+                                {renderContent(art.content, art.id)}
                               </p>
                             </div>
                             <div className="mt-6 pt-5 border-t border-ink-900/5 flex items-center justify-between">
@@ -285,6 +363,141 @@ function DocumentPane({
     </div>
   </div>
 );
+}
+
+function NoteModal({
+  isOpen,
+  onClose,
+  initialData,
+  onSave,
+  onDelete
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  initialData: { articleId: string, text: string, noteId?: string, noteContent?: string, color?: string } | null;
+  onSave: (note: UserNote) => void;
+  onDelete?: (noteId: string) => void;
+}) {
+  const [content, setContent] = useState('');
+  const [color, setColor] = useState('yellow');
+
+  useEffect(() => {
+    if (isOpen && initialData) {
+      setContent(initialData.noteContent || '');
+      setColor(initialData.color || 'yellow');
+    }
+  }, [isOpen, initialData]);
+
+  if (!isOpen || !initialData) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden selection-menu-ignore"
+      >
+        <div className="flex items-center justify-between p-4 border-b border-slate-100">
+          <div className="flex items-center gap-2 text-slate-800 font-bold text-base">
+            <MessageCircleHeart className="text-pink-500" size={20} />
+            Ghi chú đoạn văn
+          </div>
+          <button onClick={onClose} className="p-2 text-slate-400 hover:bg-slate-100 rounded-full transition-colors">
+            <X size={18} />
+          </button>
+        </div>
+        
+        <div className="p-5 space-y-5">
+          <div className="pl-4 border-l-[3px] border-slate-900 bg-[#fef08a] py-3 pr-4 rounded-r-lg text-slate-800 text-sm italic">
+            "{initialData.text.length > 100 ? initialData.text.substring(0, 100) + '...' : initialData.text}"
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2">
+              Nội dung ghi chú
+            </label>
+            <textarea 
+              value={content}
+              onChange={e => setContent(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  onSave({
+                    id: initialData.noteId || Date.now().toString(),
+                    articleId: initialData.articleId,
+                    text: initialData.text,
+                    note: content,
+                    color
+                  });
+                  onClose();
+                }
+              }}
+              placeholder="Bạn thắc mắc hay cần lưu ý gì ở đoạn này?"
+              className="w-full border-2 border-yellow-400 outline-none rounded-xl p-3 text-sm min-h-[120px] resize-none focus:ring-4 focus:ring-yellow-400/20 transition-all font-medium text-slate-700 placeholder:text-slate-400"
+            />
+          </div>
+
+          <div className="flex items-center gap-4">
+            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide shrink-0">
+              Màu sắc:
+            </label>
+            <div className="flex items-center gap-2.5">
+              {[
+                { id: 'yellow', hex: '#fef08a' },
+                { id: 'green', hex: '#bbf7d0' },
+                { id: 'blue', hex: '#bfdbfe' },
+                { id: 'pink', hex: '#fbcfe8' },
+                { id: 'purple', hex: '#e9d5ff' }
+              ].map(c => (
+                <button 
+                  key={c.id}
+                  onClick={() => setColor(c.id)}
+                  className={`w-7 h-7 rounded-full transition-all ${color === c.id ? 'border-2 border-slate-900 scale-110' : 'hover:scale-110 border border-slate-200 shadow-sm'}`}
+                  style={{ backgroundColor: c.hex }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="p-5 pt-0 flex gap-3">
+          {initialData.noteId && (
+            <button 
+              onClick={() => {
+                if (onDelete && initialData.noteId) onDelete(initialData.noteId);
+                onClose();
+              }}
+              className="px-6 py-3 text-red-600 bg-red-50 hover:bg-red-100 font-bold rounded-xl text-sm transition-colors whitespace-nowrap"
+            >
+              Xóa
+            </button>
+          )}
+          <button 
+            onClick={onClose}
+            className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition-colors flex justify-center items-center"
+          >
+            Đóng
+          </button>
+          <button 
+            onClick={() => {
+              onSave({
+                id: initialData.noteId || Date.now().toString(),
+                articleId: initialData.articleId,
+                text: initialData.text,
+                note: content,
+                color
+              });
+              onClose();
+            }}
+            className="flex-1 py-3 bg-[#0f172a] hover:bg-slate-800 text-white font-bold rounded-xl text-sm transition-colors flex justify-center items-center"
+          >
+            Lưu lại
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
 }
 
 export default function App() {
@@ -316,9 +529,14 @@ export default function App() {
     });
   };
 
-  const effectiveLuatSearch = searchQueryLuat.trim() || searchQuery.trim();
-  const effectiveNdSearch = searchQueryNd.trim() || searchQuery.trim();
-  const effectiveTtSearch = searchQueryTt.trim() || searchQuery.trim();
+  const deferredSearchQuery = useDeferredValue(searchQuery);
+  const deferredSearchQueryLuat = useDeferredValue(searchQueryLuat);
+  const deferredSearchQueryNd = useDeferredValue(searchQueryNd);
+  const deferredSearchQueryTt = useDeferredValue(searchQueryTt);
+
+  const effectiveLuatSearch = deferredSearchQueryLuat.trim() || deferredSearchQuery.trim();
+  const effectiveNdSearch = deferredSearchQueryNd.trim() || deferredSearchQuery.trim();
+  const effectiveTtSearch = deferredSearchQueryTt.trim() || deferredSearchQuery.trim();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [showLegalBasis, setShowLegalBasis] = useState(false);
@@ -380,6 +598,78 @@ export default function App() {
   const [isNdSidebarExpanded, setIsNdSidebarExpanded] = useState(false);
   const [isTtSidebarExpanded, setIsTtSidebarExpanded] = useState(false);
   const [isBookmarksExpanded, setIsBookmarksExpanded] = useState(false);
+
+  // Notes state
+  const [userNotes, setUserNotes] = useState<UserNote[]>([]);
+  const [noteDraft, setNoteDraft] = useState<{ articleId: string, text: string, noteId?: string, noteContent?: string, color?: string } | null>(null);
+  const [selectionMenu, setSelectionMenu] = useState<{ top: number, left: number, text: string, articleId: string } | null>(null);
+
+  useEffect(() => {
+    const handleMouseUp = (e: MouseEvent) => {
+      if ((e.target as HTMLElement).closest('.selection-menu-ignore')) return;
+
+      setTimeout(() => {
+        const selection = window.getSelection();
+        if (!selection || selection.isCollapsed) {
+          setSelectionMenu(null);
+          return;
+        }
+
+        const text = selection.toString().trim();
+        if (!text) {
+          setSelectionMenu(null);
+          return;
+        }
+
+        let node = selection.anchorNode;
+        let articleId = '';
+        while (node && node !== document.body) {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const el = node as HTMLElement;
+            const id = el.getAttribute('data-article-id');
+            if (id) {
+              articleId = id;
+              break;
+            }
+          }
+          if (node.parentNode) node = node.parentNode;
+          else break;
+        }
+
+        if (articleId) {
+          const range = selection.getRangeAt(0);
+          const rect = range.getBoundingClientRect();
+          setSelectionMenu({
+            top: rect.top - 50,
+            left: rect.left + rect.width / 2,
+            text,
+            articleId
+          });
+        } else {
+          setSelectionMenu(null);
+        }
+      }, 10);
+    };
+
+    document.addEventListener('mouseup', handleMouseUp);
+    return () => document.removeEventListener('mouseup', handleMouseUp);
+  }, []);
+
+  const handleSaveNote = (note: UserNote) => {
+    setUserNotes(prev => {
+      const idx = prev.findIndex(n => n.id === note.id);
+      if (idx >= 0) {
+        const newNotes = [...prev];
+        newNotes[idx] = note;
+        return newNotes;
+      }
+      return [...prev, note];
+    });
+  };
+
+  const handleDeleteNote = (noteId: string) => {
+    setUserNotes(prev => prev.filter(n => n.id !== noteId));
+  };
 
   // Sidebar Resizing
   const [sidebarWidth, setSidebarWidth] = useState(230);
@@ -880,6 +1170,7 @@ export default function App() {
               )}
             </AnimatePresence>
           </div>
+          
           <div className="h-px bg-ink-900/5 mx-2 my-2" />
 
           {/* Bookmarks Section */}
@@ -1148,6 +1439,8 @@ export default function App() {
                   isSidebarOpen={isSidebarOpen}
                   bookmarkedIds={bookmarks.map(b => b.articleId)}
                   onToggleBookmark={(id, title) => handleToggleBookmark(id, 'luat', title)}
+                  userNotes={userNotes}
+                  onNoteClick={(text, articleId, noteId) => setNoteDraft({ articleId, text, noteId, noteContent: userNotes.find(n => n.id === noteId)?.note, color: userNotes.find(n => n.id === noteId)?.color })}
                />
              </div>
            </motion.div>
@@ -1203,6 +1496,8 @@ export default function App() {
                   isSidebarOpen={isSidebarOpen}
                   bookmarkedIds={bookmarks.map(b => b.articleId)}
                   onToggleBookmark={(id, title) => handleToggleBookmark(id, 'nd214', title)}
+                  userNotes={userNotes}
+                  onNoteClick={(text, articleId, noteId) => setNoteDraft({ articleId, text, noteId, noteContent: userNotes.find(n => n.id === noteId)?.note, color: userNotes.find(n => n.id === noteId)?.color })}
                />
              </div>
            </motion.div>
@@ -1258,6 +1553,8 @@ export default function App() {
                   isSidebarOpen={isSidebarOpen}
                   bookmarkedIds={bookmarks.map(b => b.articleId)}
                   onToggleBookmark={(id, title) => handleToggleBookmark(id, 'tt79', title)}
+                  userNotes={userNotes}
+                  onNoteClick={(text, articleId, noteId) => setNoteDraft({ articleId, text, noteId, noteContent: userNotes.find(n => n.id === noteId)?.note, color: userNotes.find(n => n.id === noteId)?.color })}
                />
              </div>
            </motion.div>
@@ -1311,6 +1608,60 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
+
+      {selectionMenu && (
+        <div 
+          className="fixed z-[90] selection-menu-ignore shadow-2xl rounded-full px-3 py-2 bg-[#0f172a] text-white flex items-center gap-3 animate-in fade-in zoom-in-95 duration-200 border border-white/10"
+          style={{ top: selectionMenu.top, left: selectionMenu.left, transform: 'translateX(-50%)' }}
+        >
+          <div className="flex items-center gap-2.5">
+            {[
+              { id: 'yellow', hex: '#fef08a' },
+              { id: 'green', hex: '#bbf7d0' },
+              { id: 'blue', hex: '#bfdbfe' },
+              { id: 'pink', hex: '#fbcfe8' },
+              { id: 'purple', hex: '#e9d5ff' }
+            ].map((c, i) => (
+              <button 
+                key={c.id}
+                onClick={() => {
+                  handleSaveNote({
+                    id: Date.now().toString(),
+                    articleId: selectionMenu.articleId,
+                    text: selectionMenu.text,
+                    note: '',
+                    color: c.id
+                  });
+                  setSelectionMenu(null);
+                  window.getSelection()?.removeAllRanges();
+                }}
+                className={`w-[26px] h-[26px] rounded-full transition-all hover:scale-110 border-[3px] border-[#0f172a] ring-2 ${i === 0 ? 'ring-[#fef08a]/60' : 'ring-transparent hover:ring-white/30'}`}
+                style={{ backgroundColor: c.hex }}
+              />
+            ))}
+          </div>
+          <div className="w-[1px] h-5 bg-white/20 ml-0.5 mr-0.5"></div>
+          <button
+            onClick={() => {
+              setNoteDraft({ articleId: selectionMenu.articleId, text: selectionMenu.text, color: 'yellow' });
+              setSelectionMenu(null);
+              window.getSelection()?.removeAllRanges();
+            }}
+            className="flex items-center gap-2 pr-2 pl-0.5 hover:text-white/80 transition-colors text-sm font-semibold text-white whitespace-nowrap"
+          >
+            <Pencil size={15} />
+            Ghi chú
+          </button>
+        </div>
+      )}
+
+      <NoteModal 
+        isOpen={!!noteDraft}
+        onClose={() => setNoteDraft(null)}
+        initialData={noteDraft}
+        onSave={handleSaveNote}
+        onDelete={handleDeleteNote}
+      />
     </div>
   );
 }
