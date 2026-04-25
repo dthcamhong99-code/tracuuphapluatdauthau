@@ -158,9 +158,9 @@ b) Cản trở người có thẩm quyền, chủ đầu tư, bên mời thầu,
 
 c) Cản trở cơ quan có thẩm quyền giám sát, kiểm tra, thanh tra, kiểm toán đối với hoạt động đấu thầu;
 
-d) Cố tình khiếu nại, tố cáo, kiến nghị sai sự thật để cản trở hoạt động đấu thầu; đ) Có hành vi vi phạm pháp luật về an toàn, an ninh mạng nhằm can thiệp,
+d) Cố tình khiếu nại, tố cáo, kiến nghị sai sự thật để cản trở hoạt động đấu thầu; 
 
-cản trở việc đấu thầu qua mạng.
+đ) Có hành vi vi phạm pháp luật về an toàn, an ninh mạng nhằm can thiệp, cản trở việc đấu thầu qua mạng.
 
 6. Không bảo đảm công bằng, minh bạch bao gồm các hành vi sau đây:
 

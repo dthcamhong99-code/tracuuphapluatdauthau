@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useCallback, useEffect, useDeferredValue } from 'react';
-import { Search, ChevronRight, Gavel, BookOpen, AlertCircle, Info, Menu, X, ArrowLeft, Filter, ChevronDown, Scale, ScrollText, Snowflake, Download, Bookmark, MessageCircleHeart, Pencil } from 'lucide-react';
+import { Search, ChevronRight, Gavel, BookOpen, AlertCircle, Info, Menu, X, ArrowLeft, Filter, ChevronDown, Scale, ScrollText, Snowflake, Download, Bookmark, MessageCircleHeart, Pencil, Target } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { DOCUMENTS, allLawArticles } from './data/lawData';
 import { nghiDinh214Data, allNd214Articles } from './data/nd214';
@@ -161,12 +161,14 @@ function DocumentPane({
            if (el.type === 'note' && el.note) {
               return (
                 <mark 
+                  id={`note-${el.note.id}`}
                   key={i} 
                   className={`relative cursor-pointer group ${colorStyles[el.note.color || 'yellow']} text-ink-900 border-l-[3px] rounded-r-sm pr-1 shadow-sm inline my-0.5 leading-relaxed decoration-clone`}
                   onClick={(e) => { e.stopPropagation(); onNoteClick(el.note!.text, articleId, el.note!.id); }}
+                  data-note-tooltip={el.note.note || ''}
                 >
-                  <span className="italic px-0.5">{el.extText}</span>
-                  <span className="inline-flex relative -top-3 -left-1.5 align-top z-10 p-0.5 rounded-full bg-pink-500 text-white shadow-sm ring-2 ring-white hover:scale-110 transition-transform cursor-pointer">
+                  <span className="italic px-0.5 pointer-events-none">{el.extText}</span>
+                  <span className="inline-flex relative -top-3 -left-1.5 align-top z-10 p-0.5 rounded-full bg-pink-500 text-white shadow-sm ring-2 ring-white hover:scale-110 transition-transform cursor-pointer pointer-events-none">
                     <MessageCircleHeart size={14} />
                   </span>
                 </mark>
@@ -295,62 +297,156 @@ function DocumentPane({
         ) : (
           <div className="space-y-0">
             {currentArticles.length > 0 ? (
-              <div className="space-y-0">
-                {currentArticles.map((art) => (
-                  <div key={art.id} id={`${docData.id}-art-${art.id}`} className="scroll-mt-20 bg-white rounded-xl border border-ink-900/5 shadow-sm hover:shadow-md transition-all duration-300 overflow-visible mb-4 last:mb-0">
-                    <div 
-                      onClick={() => onToggleArticle(art.id)}
-                      className={`w-full text-left cursor-pointer p-2.5 lg:py-3 lg:px-4 flex items-center justify-between gap-3 transition-colors rounded-xl ${expandedArticleId === art.id ? 'bg-yellow-400 text-slate-900 sticky top-0 z-20 shadow-xl shadow-yellow-400/40' : 'hover:bg-cream-50'}`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`font-bold px-2 py-0.5 border rounded-md transition-all shrink-0 whitespace-nowrap ${expandedArticleId === art.id ? 'border-slate-900/50 bg-yellow-400 text-slate-900 shadow-sm' : 'border-slate-200 text-ink-800'} text-xs lg:text-sm tracking-tight`}>
-                          Điều {art.id.split('D')[1]}
-                        </div>
-                        <h2 className={`font-bold text-xs lg:text-sm tracking-tight ${expandedArticleId === art.id ? 'text-slate-900' : 'text-ink-900'} line-clamp-2 leading-snug`}>
-                          {art.title.split('.')[1]?.trim() || art.title}
-                        </h2>
-                      </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onToggleBookmark(art.id, art.title);
-                          }}
-                          className={`p-1.5 rounded-full hover:bg-black/10 transition-colors ${bookmarkedIds.includes(art.id) ? (expandedArticleId === art.id ? 'text-rose-600' : 'text-rose-500') : (expandedArticleId === art.id ? 'text-slate-900/60 hover:text-slate-900' : 'text-slate-300 hover:text-slate-500')}`}
-                        >
-                          <Bookmark size={16} fill={bookmarkedIds.includes(art.id) ? 'currentColor' : 'none'} />
-                        </button>
-                        <ChevronDown size={18} className={`transition-transform duration-300 shrink-0 ${expandedArticleId === art.id ? 'rotate-180 text-slate-900' : 'text-slate-400'}`} />
-                      </div>
-                    </div>
+              <div className="space-y-6">
+                {docData.chapters.map(chapter => {
+                  const hasMatchingArticles = currentArticles.some(ca => chapter.articles?.some(a => a.id === ca.id) || chapter.sections?.some(s => s.articles.some(sa => sa.id === ca.id)));
+                  if (!hasMatchingArticles) return null;
 
-                    <AnimatePresence>
-                      {expandedArticleId === art.id && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-4 lg:px-5 pb-5 pt-3 border-t border-ink-900/5">
-                            <div className="pr-2">
-                              <p className="text-ink-800 leading-relaxed text-[12px] lg:text-[13px] whitespace-pre-wrap font-sans selection:bg-deep-yellow/30 text-justify">
-                                {renderContent(art.content, art.id)}
-                              </p>
-                            </div>
-                            <div className="mt-6 pt-5 border-t border-ink-900/5 flex items-center justify-between">
-                              <div className="flex items-center gap-2 text-deep-yellow-dark/60 text-[9px] font-black uppercase tracking-[0.2em]">
-                                <Info size={14} />
-                                TRÍCH {docData.title.toUpperCase()}
+                  return (
+                    <div key={chapter.id} className="relative">
+                      <div id={`${docData.id}-chapter-${chapter.id}`} className="scroll-mt-5 sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md py-1.5 mb-3 rounded-lg px-3 border border-slate-200/40 flex items-center justify-between">
+                         <h3 className="font-semibold text-slate-500 text-[11px] lg:text-xs uppercase tracking-wider">
+                            {chapter.title}
+                         </h3>
+                      </div>
+
+                      {/* Render direct articles of the chapter first */}
+                      {chapter.articles?.some(a => currentArticles.some(ca => ca.id === a.id)) && (
+                        <div className="space-y-4 mb-6 px-1 lg:px-2">
+                          {chapter.articles.filter(a => currentArticles.some(ca => ca.id === a.id)).map((art) => (
+                            <div key={art.id} id={`${docData.id}-art-${art.id}`} className="scroll-mt-20 bg-white rounded-xl border border-ink-900/5 shadow-sm hover:shadow-md transition-all duration-300 overflow-visible mb-4 last:mb-0">
+                              <div 
+                                onClick={() => onToggleArticle(art.id)}
+                                className={`w-full text-left cursor-pointer p-2.5 lg:py-3 lg:px-4 flex items-center justify-between gap-3 transition-colors rounded-xl ${expandedArticleId === art.id ? 'bg-yellow-400 text-slate-900 sticky top-[34px] z-20 shadow-xl shadow-yellow-400/40' : 'hover:bg-cream-50'}`}
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className={`font-bold px-2 py-0.5 border rounded-md transition-all shrink-0 whitespace-nowrap ${expandedArticleId === art.id ? 'border-slate-900/50 bg-yellow-400 text-slate-900 shadow-sm' : 'border-slate-200 text-ink-800'} text-xs lg:text-sm tracking-tight`}>
+                                    Điều {art.id.split('D')[1]}
+                                  </div>
+                                  <h2 className={`font-bold text-xs lg:text-sm tracking-tight ${expandedArticleId === art.id ? 'text-slate-900' : 'text-ink-900'} line-clamp-2 leading-snug`}>
+                                    {art.title.split('.')[1]?.trim() || art.title}
+                                  </h2>
+                                </div>
+                                <div className="flex items-center gap-2 shrink-0">
+                                  <button 
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onToggleBookmark(art.id, art.title);
+                                    }}
+                                    className={`p-1.5 rounded-full hover:bg-black/10 transition-colors ${bookmarkedIds.includes(art.id) ? (expandedArticleId === art.id ? 'text-rose-600' : 'text-rose-500') : (expandedArticleId === art.id ? 'text-slate-900/60 hover:text-slate-900' : 'text-slate-300 hover:text-slate-500')}`}
+                                  >
+                                    <Bookmark size={16} fill={bookmarkedIds.includes(art.id) ? 'currentColor' : 'none'} />
+                                  </button>
+                                  <ChevronDown size={18} className={`transition-transform duration-300 shrink-0 ${expandedArticleId === art.id ? 'rotate-180 text-slate-900' : 'text-slate-400'}`} />
+                                </div>
                               </div>
+
+                              <AnimatePresence>
+                                {expandedArticleId === art.id && (
+                                  <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                                    className="overflow-hidden"
+                                  >
+                                    <div className="px-4 lg:px-5 pb-5 pt-3 border-t border-ink-900/5">
+                                      <div className="pr-2">
+                                        <p className="text-ink-800 leading-relaxed text-[12px] lg:text-[13px] whitespace-pre-wrap font-sans selection:bg-deep-yellow/30 text-justify">
+                                          {renderContent(art.content, art.id)}
+                                        </p>
+                                      </div>
+                                      <div className="mt-6 pt-5 border-t border-ink-900/5 flex items-center justify-between">
+                                        <div className="flex items-center gap-2 text-deep-yellow-dark/60 text-[9px] font-black uppercase tracking-[0.2em]">
+                                          <Info size={14} />
+                                          TRÍCH {docData.title.toUpperCase()}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
                             </div>
-                          </div>
-                        </motion.div>
+                          ))}
+                        </div>
                       )}
-                    </AnimatePresence>
-                  </div>
-                ))}
+
+                      {/* Render Sections */}
+                      {chapter.sections?.map(section => {
+                         const hasMatchingSectionArticles = section.articles.some(a => currentArticles.some(ca => ca.id === a.id));
+                         if (!hasMatchingSectionArticles) return null;
+
+                         return (
+                           <div key={section.id} id={`${docData.id}-section-${section.id}`} className="scroll-mt-5 mb-6 px-1 lg:px-3">
+                             <div className="flex flex-col gap-1 mb-3 pl-2.5 border-l-[1.5px] border-deep-yellow/70">
+                               <h4 className="font-semibold text-slate-500 text-[10px] lg:text-[11px] uppercase tracking-wider">
+                                 {section.title}
+                               </h4>
+                             </div>
+                             
+                             <div className="space-y-4 pl-0 lg:pl-2">
+                               {section.articles.filter(a => currentArticles.some(ca => ca.id === a.id)).map((art) => (
+                                <div key={art.id} id={`${docData.id}-art-${art.id}`} className="scroll-mt-20 bg-white rounded-xl border border-ink-900/5 shadow-sm hover:shadow-md transition-all duration-300 overflow-visible mb-4 last:mb-0">
+                                  <div 
+                                    onClick={() => onToggleArticle(art.id)}
+                                    className={`w-full text-left cursor-pointer p-2.5 lg:py-3 lg:px-4 flex items-center justify-between gap-3 transition-colors rounded-xl ${expandedArticleId === art.id ? 'bg-yellow-400 text-slate-900 sticky top-[34px] z-20 shadow-xl shadow-yellow-400/40' : 'hover:bg-cream-50'}`}
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      <div className={`font-bold px-2 py-0.5 border rounded-md transition-all shrink-0 whitespace-nowrap ${expandedArticleId === art.id ? 'border-slate-900/50 bg-yellow-400 text-slate-900 shadow-sm' : 'border-slate-200 text-ink-800'} text-xs lg:text-sm tracking-tight`}>
+                                        Điều {art.id.split('D')[1]}
+                                      </div>
+                                      <h2 className={`font-bold text-xs lg:text-sm tracking-tight ${expandedArticleId === art.id ? 'text-slate-900' : 'text-ink-900'} line-clamp-2 leading-snug`}>
+                                        {art.title.split('.')[1]?.trim() || art.title}
+                                      </h2>
+                                    </div>
+                                    <div className="flex items-center gap-2 shrink-0">
+                                      <button 
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          onToggleBookmark(art.id, art.title);
+                                        }}
+                                        className={`p-1.5 rounded-full hover:bg-black/10 transition-colors ${bookmarkedIds.includes(art.id) ? (expandedArticleId === art.id ? 'text-rose-600' : 'text-rose-500') : (expandedArticleId === art.id ? 'text-slate-900/60 hover:text-slate-900' : 'text-slate-300 hover:text-slate-500')}`}
+                                      >
+                                        <Bookmark size={16} fill={bookmarkedIds.includes(art.id) ? 'currentColor' : 'none'} />
+                                      </button>
+                                      <ChevronDown size={18} className={`transition-transform duration-300 shrink-0 ${expandedArticleId === art.id ? 'rotate-180 text-slate-900' : 'text-slate-400'}`} />
+                                    </div>
+                                  </div>
+
+                                  <AnimatePresence>
+                                    {expandedArticleId === art.id && (
+                                      <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: 'auto', opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                                        className="overflow-hidden"
+                                      >
+                                        <div className="px-4 lg:px-5 pb-5 pt-3 border-t border-ink-900/5">
+                                          <div className="pr-2">
+                                            <p className="text-ink-800 leading-relaxed text-[12px] lg:text-[13px] whitespace-pre-wrap font-sans selection:bg-deep-yellow/30 text-justify">
+                                              {renderContent(art.content, art.id)}
+                                            </p>
+                                          </div>
+                                          <div className="mt-6 pt-5 border-t border-ink-900/5 flex items-center justify-between">
+                                            <div className="flex items-center gap-2 text-deep-yellow-dark/60 text-[9px] font-black uppercase tracking-[0.2em]">
+                                              <Info size={14} />
+                                              TRÍCH {docData.title.toUpperCase()}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </motion.div>
+                                    )}
+                                  </AnimatePresence>
+                                </div>
+                               ))}
+                             </div>
+                           </div>
+                         );
+                      })}
+                    </div>
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-20">
@@ -500,6 +596,217 @@ function NoteModal({
   );
 }
 
+const KEYWORD_SUGGESTIONS = [
+  "Chỉ định thầu",                 
+  "Đấu thầu rộng rãi",             
+  "Đấu thầu hạn chế",              
+  "Chào hàng cạnh tranh",          
+  "Mua sắm trực tiếp",             
+  "Lựa chọn nhà thầu",             
+  "Tổ chuyên gia",                 
+  "Tổ thẩm định",                  
+  "Bảo đảm dự thầu",               
+  "Bảo đảm thực hiện hợp đồng",    
+  "Hồ sơ mời thầu",                
+  "Hồ sơ dự thầu",                 
+  "Hợp đồng trọn gói",             
+  "Hợp đồng theo đơn giá",         
+  "Đơn giá cố định",
+  "Đơn giá điều chỉnh",
+  "Tự thực hiện",
+  "Cung cấp dịch vụ tư vấn",
+  "Tùy chọn mua thêm",
+  "Chi phí xét thầu",
+  "Đấu thầu qua mạng",
+  "Chỉ có 01 nhà thầu tham dự",
+  "Chỉ có 01 nhà thầu đáp ứng",
+  "Chỉ có 01 nhà thầu vượt qua bước đánh giá kỹ thuật",
+  "Chỉ có 1 nhà thầu",
+  "Tham gia đấu thầu",
+  "Hủy thầu",
+  "Bảo lãnh tạm ứng",
+  "Giá gói thầu",
+  "Giá dự thầu",
+  "Thời gian chuẩn bị hồ sơ",
+  "Kết quả lựa chọn nhà thầu",
+  "Làm rõ hồ sơ",
+  "Sửa đổi hồ sơ mời thầu",
+  "Đăng tải thông tin",
+  "Chủ đầu tư",
+  "Bên mời thầu",
+];
+
+// Helper to extract relevant phrases dynamically
+function extractPhrases(query: string): string[] {
+  const dynamicSet = new Set<string>();
+  const lowerQ = query.trim().toLowerCase();
+  
+  if (lowerQ.length < 2) return [];
+
+  // Split text by common clause-ending punctuation
+  const splitTextToClauses = (text: string) => {
+    return text.split(/[.,;:()!?\n\r"“”\[\]]/);
+  };
+
+  const processText = (text: string, isTitle: boolean = false) => {
+    if (!text) return;
+
+    if (isTitle && text.toLowerCase().includes(lowerQ)) {
+       let cleanTitle = text.trim().replace(/\s+/g, ' ');
+       if (cleanTitle.length <= 150) {
+           // It's a title, we can trust it makes grammatical sense
+           dynamicSet.add(cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1));
+       }
+    }
+
+    const clauses = splitTextToClauses(text);
+    for (let clause of clauses) {
+       // Normalize whitespace
+       clause = clause.trim().replace(/\s+/g, ' ');
+       
+       // Remove common bullet points or numbering to make it a generic phrase
+       clause = clause.replace(/^([a-zđ]\)|[-+*]|\d+\.)\s+/i, '');
+       
+       if (clause.length <= query.length) continue;
+       
+       if (clause.toLowerCase().includes(lowerQ)) {
+          // Only extract whole clauses that are reasonably short to ensure they have perfect grammar
+          // and don't overwhelm the UI. Punctuation boundaries naturally create meaningful phrases.
+          if (clause.length <= 100) {
+             clause = clause.charAt(0).toUpperCase() + clause.slice(1);
+             dynamicSet.add(clause);
+          }
+       }
+    }
+  };
+
+  try {
+    const arraysToScan = [allLawArticles, allNd214Articles, allTt79Articles];
+    for (const articles of arraysToScan) {
+      for (const art of articles) {
+         if (art.title) processText(art.title, true);
+         if (art.content) processText(art.content, false);
+         if (dynamicSet.size >= 15) return Array.from(dynamicSet).slice(0, 10);
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  
+  return Array.from(dynamicSet).slice(0, 10);
+}
+
+function AutocompleteInput({
+  value,
+  onChange,
+  placeholder,
+  className,
+  containerClassName,
+  iconSize = 14,
+  dark = false,
+  showClear = true
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  placeholder: string;
+  className?: string;
+  containerClassName?: string;
+  iconSize?: number;
+  dark?: boolean;
+  showClear?: boolean;
+}) {
+  const [show, setShow] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setShow(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const filtered = useMemo(() => {
+    if (!value.trim()) return [];
+    
+    const q = value.toLowerCase();
+    const staticMatches = KEYWORD_SUGGESTIONS.filter(k => k.toLowerCase().includes(q));
+    const dynamicMatches = extractPhrases(value.trim());
+    
+    // Combine and remove duplicates (case-insensitive)
+    const combined = [...staticMatches, ...dynamicMatches];
+    const uniqueCombined: string[] = [];
+    const seen = new Set<string>();
+    
+    for (const item of combined) {
+        const lower = item.toLowerCase();
+        if (!seen.has(lower)) {
+            uniqueCombined.push(item);
+            seen.add(lower);
+        }
+    }
+
+    return uniqueCombined.slice(0, 8);
+  }, [value]);
+
+  return (
+    <div className={`relative ${containerClassName}`} ref={wrapperRef}>
+      <Search className={`absolute ${dark ? 'left-3' : 'left-5'} top-1/2 -translate-y-1/2 transition-colors z-10 ${dark ? 'text-slate-400 group-focus-within:text-amber-400' : 'text-slate-500 group-focus-within:text-deep-yellow'}`} size={iconSize} />
+      <input
+        type="text"
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => {
+           onChange(e.target.value);
+           setShow(true);
+        }}
+        onFocus={() => setShow(true)}
+        onKeyDown={(e) => {
+           if (e.key === 'Enter') {
+              setShow(false);
+           }
+        }}
+        className={className}
+      />
+      {value && showClear && (
+         <button onClick={() => {onChange(""); setShow(false);}} className={`absolute right-3 top-1/2 -translate-y-1/2 ${dark ? 'text-slate-400 hover:text-white' : 'text-slate-400 hover:text-slate-600'} transition-colors z-10`}>
+           <X size={iconSize} />
+         </button>
+      )}
+      
+      <AnimatePresence>
+        {show && filtered.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 5 }}
+            transition={{ duration: 0.15 }}
+            className={`absolute top-full left-0 right-0 mt-1.5 rounded-xl border shadow-xl z-50 overflow-hidden ${dark ? 'bg-slate-800 border-slate-700 text-slate-200' : 'bg-white border-slate-200 text-slate-700'}`}
+          >
+            {filtered.map(s => (
+               <div
+                 key={s}
+                 onClick={() => {
+                   onChange(s);
+                   setShow(false);
+                 }}
+                 className={`px-4 py-2 text-sm cursor-pointer transition-colors ${dark ? 'hover:bg-amber-500/20 hover:text-white' : 'hover:bg-slate-50 hover:text-deep-yellow-dark'}`}
+               >
+                 <div className="flex items-center gap-2">
+                   <Search size={12} className={dark ? 'text-slate-500' : 'text-slate-400'} />
+                   <span>{s}</span>
+                 </div>
+               </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function App() {
   const [selectedLuatIds, setSelectedLuatIds] = useState<string[]>([]);
   const [expandedLuatArticleId, setExpandedLuatArticleId] = useState<string | null>(null);
@@ -598,9 +905,22 @@ export default function App() {
   const [isNdSidebarExpanded, setIsNdSidebarExpanded] = useState(false);
   const [isTtSidebarExpanded, setIsTtSidebarExpanded] = useState(false);
   const [isBookmarksExpanded, setIsBookmarksExpanded] = useState(false);
+  const [isNotesExpanded, setIsNotesExpanded] = useState(false);
 
   // Notes state
-  const [userNotes, setUserNotes] = useState<UserNote[]>([]);
+  const [userNotes, setUserNotes] = useState<UserNote[]>(() => {
+    try {
+      const saved = localStorage.getItem('legal_notes');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('legal_notes', JSON.stringify(userNotes));
+  }, [userNotes]);
+
   const [noteDraft, setNoteDraft] = useState<{ articleId: string, text: string, noteId?: string, noteContent?: string, color?: string } | null>(null);
   const [selectionMenu, setSelectionMenu] = useState<{ top: number, left: number, text: string, articleId: string } | null>(null);
 
@@ -653,6 +973,66 @@ export default function App() {
 
     document.addEventListener('mouseup', handleMouseUp);
     return () => document.removeEventListener('mouseup', handleMouseUp);
+  }, []);
+
+  const [globalTooltip, setGlobalTooltip] = useState<{ content: string; top: number; left: number; arrowOffset: number } | null>(null);
+
+  useEffect(() => {
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest('[data-note-tooltip]');
+      if (!target) {
+        setGlobalTooltip(null);
+        return;
+      }
+      
+      const content = target.getAttribute('data-note-tooltip');
+      if (!content) {
+        setGlobalTooltip(null);
+        return;
+      }
+
+      const rect = target.getBoundingClientRect();
+      const markCenter = rect.left + rect.width / 2;
+      let top = rect.top - 8;
+      
+      const approxTooltipWidth = 320;
+      const padding = 16;
+      let left = markCenter;
+      left = Math.max(left, padding + approxTooltipWidth / 2);
+      left = Math.min(left, window.innerWidth - padding - approxTooltipWidth / 2);
+
+      const arrowOffset = markCenter - left;
+
+      setGlobalTooltip({ content, top, left, arrowOffset });
+    };
+    
+    // We also want to clear tooltip on mouse out, wait actually `mouseover` on document handles clearing if target is not a tooltip.
+    // But occasionally you move out of window.
+    
+    const handleMouseOut = (e: MouseEvent) => {
+      // If moving to an element that doesn't have the tooltip or isn't inside one
+      if (e.relatedTarget && !(e.relatedTarget as HTMLElement).closest('[data-note-tooltip]')) {
+         setGlobalTooltip(null);
+      }
+    };
+
+    const handleScroll = () => {
+      setGlobalTooltip(null);
+    };
+
+    document.addEventListener('mouseover', handleMouseOver);
+    document.addEventListener('mouseout', handleMouseOut);
+    document.addEventListener('wheel', handleScroll, { capture: true, passive: true });
+    document.addEventListener('touchmove', handleScroll, { capture: true, passive: true });
+    document.addEventListener('scroll', handleScroll, { capture: true, passive: true });
+    
+    return () => {
+      document.removeEventListener('mouseover', handleMouseOver);
+      document.removeEventListener('mouseout', handleMouseOut);
+      document.removeEventListener('wheel', handleScroll, { capture: true } as any);
+      document.removeEventListener('touchmove', handleScroll, { capture: true } as any);
+      document.removeEventListener('scroll', handleScroll, { capture: true } as any);
+    };
   }, []);
 
   const handleSaveNote = (note: UserNote) => {
@@ -715,13 +1095,45 @@ export default function App() {
     );
   };
 
-  const handleSelectLuat = (id: string | string[], articleId?: string) => {
+  const handleScrollTo = (e: any, docId: string, type: 'chapter' | 'section', id: string) => {
+    e.stopPropagation();
+    
+    // Select the chapter/section if it is not already selected so it renders
+    if (docId === 'luat') {
+       if (!selectedLuatIds.includes(id)) handleSelectLuat(id);
+    } else if (docId === 'nd214') {
+       if (!selectedNdIds.includes(id)) handleSelectNd(id);
+    } else if (docId === 'tt79') {
+       if (!selectedTtIds.includes(id)) handleSelectTt(id);
+    }
+
+    // Scroll to the element
+    setTimeout(() => {
+      const element = document.getElementById(`${docId}-${type}-${id}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 150);
+  };
+
+  const handleSelectLuat = (id: string | string[], articleId?: string, noteId?: string) => {
     if (Array.isArray(id)) {
       setSelectedLuatIds(id);
     } else {
-      setSelectedLuatIds(prev => 
-        prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-      );
+      setSelectedLuatIds(prev => {
+        if (prev.includes(id)) {
+          return prev.filter(i => i !== id);
+        }
+        
+        let newIds = [...prev];
+        if (id.includes('-S')) {
+          const parentChapterId = id.split('-S')[0];
+          newIds = newIds.filter(i => i !== parentChapterId);
+        } else {
+          newIds = newIds.filter(i => !i.startsWith(`${id}-S`));
+        }
+        return [...newIds, id];
+      });
     }
     
     if (!effectiveLuatSearch) {
@@ -730,20 +1142,38 @@ export default function App() {
     if (articleId) {
       setExpandedLuatArticleId(articleId);
       setTimeout(() => {
+        if (noteId) {
+          const noteEl = document.getElementById(`note-${noteId}`);
+          if (noteEl) {
+            noteEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+          }
+        }
         const el = document.getElementById(`luat-art-${articleId}`);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 150);
     }
-    if (window.innerWidth < 1024 && !Array.isArray(id)) setIsSidebarOpen(false);
+    if (window.innerWidth < 1024 && !Array.isArray(id) && !noteId) setIsSidebarOpen(false);
   };
 
-  const handleSelectNd = (id: string | string[], articleId?: string) => {
+  const handleSelectNd = (id: string | string[], articleId?: string, noteId?: string) => {
     if (Array.isArray(id)) {
       setSelectedNdIds(id);
     } else {
-      setSelectedNdIds(prev => 
-        prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-      );
+      setSelectedNdIds(prev => {
+        if (prev.includes(id)) {
+          return prev.filter(i => i !== id);
+        }
+        
+        let newIds = [...prev];
+        if (id.includes('-S')) {
+          const parentChapterId = id.split('-S')[0];
+          newIds = newIds.filter(i => i !== parentChapterId);
+        } else {
+          newIds = newIds.filter(i => !i.startsWith(`${id}-S`));
+        }
+        return [...newIds, id];
+      });
     }
 
     if (!effectiveNdSearch) {
@@ -752,20 +1182,38 @@ export default function App() {
     if (articleId) {
       setExpandedNdArticleId(articleId);
       setTimeout(() => {
+        if (noteId) {
+          const noteEl = document.getElementById(`note-${noteId}`);
+          if (noteEl) {
+            noteEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+          }
+        }
         const el = document.getElementById(`nd214-art-${articleId}`);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 150);
     }
-    if (window.innerWidth < 1024 && !Array.isArray(id)) setIsSidebarOpen(false);
+    if (window.innerWidth < 1024 && !Array.isArray(id) && !noteId) setIsSidebarOpen(false);
   };
 
-  const handleSelectTt = (id: string | string[], articleId?: string) => {
+  const handleSelectTt = (id: string | string[], articleId?: string, noteId?: string) => {
     if (Array.isArray(id)) {
       setSelectedTtIds(id);
     } else {
-      setSelectedTtIds(prev => 
-        prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-      );
+      setSelectedTtIds(prev => {
+        if (prev.includes(id)) {
+          return prev.filter(i => i !== id);
+        }
+        
+        let newIds = [...prev];
+        if (id.includes('-S')) {
+          const parentChapterId = id.split('-S')[0];
+          newIds = newIds.filter(i => i !== parentChapterId);
+        } else {
+          newIds = newIds.filter(i => !i.startsWith(`${id}-S`));
+        }
+        return [...newIds, id];
+      });
     }
 
     if (!effectiveTtSearch) {
@@ -774,11 +1222,18 @@ export default function App() {
     if (articleId) {
       setExpandedTtArticleId(articleId);
       setTimeout(() => {
+        if (noteId) {
+          const noteEl = document.getElementById(`note-${noteId}`);
+          if (noteEl) {
+            noteEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+          }
+        }
         const el = document.getElementById(`tt79-art-${articleId}`);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 150);
     }
-    if (window.innerWidth < 1024 && !Array.isArray(id)) setIsSidebarOpen(false);
+    if (window.innerWidth < 1024 && !Array.isArray(id) && !noteId) setIsSidebarOpen(false);
   };
 
   return (
@@ -952,7 +1407,7 @@ export default function App() {
                               <div key={chapter.id} className="mb-1.5">
                                 <button
                                   onClick={() => handleSelectLuat(chapter.id)}
-                                  className={`w-full text-left px-2 py-2 rounded-xl text-[11px] transition-all duration-300 flex items-center gap-2 group relative ${
+                                  className={`w-full text-left pr-8 pl-2 py-2 rounded-xl text-[11px] transition-all duration-300 flex items-center gap-2 group relative ${
                                     isSelected && !effectiveLuatSearch
                                       ? 'bg-yellow-400 text-slate-900 font-bold shadow-md shadow-yellow-400/40'
                                       : 'text-ink-800 hover:bg-ink-900/5 font-semibold'
@@ -968,6 +1423,13 @@ export default function App() {
                                     />
                                   </div>
                                   <span className="text-[11px] tracking-tight leading-snug whitespace-normal break-words py-0.5">{chapter.title.split(':')[0] || chapter.title}</span>
+                                  <div 
+                                     className="absolute right-1 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-black/10 rounded-md text-slate-500 hover:text-blue-700"
+                                     onClick={(e) => handleScrollTo(e, 'luat', 'chapter', chapter.id)}
+                                     title="Chuyển đến"
+                                  >
+                                     <Target size={14} />
+                                  </div>
                                 </button>
                                 
                                 <AnimatePresence>
@@ -982,17 +1444,25 @@ export default function App() {
                                         {chapter.sections!.map((section) => {
                                           const isSectionSelected = selectedLuatIds.includes(section.id);
                                           return (
-                                            <button
-                                              key={section.id}
-                                              onClick={() => handleSelectLuat(section.id)}
-                                              className={`w-full text-left px-3 py-1.5 rounded-lg text-[9px] transition-all duration-200 block font-medium whitespace-normal break-words ${
-                                                isSectionSelected && !effectiveLuatSearch
-                                                  ? 'text-deep-yellow-dark font-black bg-white shadow-sm'
-                                                  : 'text-ink-800/60 hover:text-ink-900 hover:bg-white/50'
-                                              }`}
-                                            >
-                                              {section.title}
-                                            </button>
+                                            <div key={section.id} className="relative group/sec">
+                                              <button
+                                                onClick={() => handleSelectLuat(section.id)}
+                                                className={`w-full text-left pr-6 pl-3 py-1.5 rounded-lg text-[9px] transition-all duration-200 block font-medium whitespace-normal break-words ${
+                                                  isSectionSelected && !effectiveLuatSearch
+                                                    ? 'text-deep-yellow-dark font-black bg-white shadow-sm'
+                                                    : 'text-ink-800/60 hover:text-ink-900 hover:bg-white/50'
+                                                }`}
+                                              >
+                                                {section.title}
+                                              </button>
+                                              <div 
+                                                className="absolute right-1 top-1/2 -translate-y-1/2 opacity-0 group-hover/sec:opacity-100 transition-opacity p-1 hover:bg-black/10 rounded-md text-slate-400 hover:text-blue-700 cursor-pointer"
+                                                onClick={(e) => handleScrollTo(e, 'luat', 'section', section.id)}
+                                                title="Chuyển đến"
+                                              >
+                                                <Target size={12} />
+                                              </div>
+                                            </div>
                                           );
                                         })}
                                       </div>
@@ -1068,7 +1538,7 @@ export default function App() {
                               <div key={chapter.id} className="mb-1.5">
                                 <button
                                   onClick={() => handleSelectNd(chapter.id)}
-                                  className={`w-full text-left px-2 py-2 rounded-xl text-[11px] transition-all duration-300 flex items-center gap-2 group relative ${
+                                  className={`w-full text-left pr-8 pl-2 py-2 rounded-xl text-[11px] transition-all duration-300 flex items-center gap-2 group relative ${
                                     isSelected && !effectiveNdSearch
                                       ? 'bg-yellow-400 text-slate-900 font-bold shadow-md shadow-yellow-400/40'
                                       : 'text-ink-800 hover:bg-ink-900/5 font-semibold'
@@ -1078,6 +1548,13 @@ export default function App() {
                                     <ChevronRight size={12} className={`transition-transform opacity-0`} />
                                   </div>
                                   <span className="text-[11px] tracking-tight leading-snug whitespace-normal break-words py-0.5">{chapter.title}</span>
+                                  <div 
+                                     className="absolute right-1 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-black/10 rounded-md text-slate-500 hover:text-blue-700"
+                                     onClick={(e) => handleScrollTo(e, 'nd214', 'chapter', chapter.id)}
+                                     title="Chuyển đến"
+                                  >
+                                     <Target size={14} />
+                                  </div>
                                 </button>
                               </div>
                             );
@@ -1148,7 +1625,7 @@ export default function App() {
                               <div key={chapter.id} className="mb-1.5">
                                 <button
                                   onClick={() => handleSelectTt(chapter.id)}
-                                  className={`w-full text-left px-2 py-2 rounded-xl text-[11px] transition-all duration-300 flex items-center gap-2 group relative ${
+                                  className={`w-full text-left pr-8 pl-2 py-2 rounded-xl text-[11px] transition-all duration-300 flex items-center gap-2 group relative ${
                                     isSelected && !effectiveTtSearch
                                       ? 'bg-yellow-400 text-slate-900 font-bold shadow-md shadow-yellow-400/40'
                                       : 'text-ink-800 hover:bg-ink-900/5 font-semibold'
@@ -1158,6 +1635,13 @@ export default function App() {
                                     <ChevronRight size={12} className={`transition-transform opacity-0`} />
                                   </div>
                                   <span className="text-[11px] tracking-tight leading-snug whitespace-normal break-words py-0.5">{chapter.title}</span>
+                                  <div 
+                                     className="absolute right-1 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-black/10 rounded-md text-slate-500 hover:text-blue-700"
+                                     onClick={(e) => handleScrollTo(e, 'tt79', 'chapter', chapter.id)}
+                                     title="Chuyển đến"
+                                  >
+                                     <Target size={14} />
+                                  </div>
                                 </button>
                               </div>
                             );
@@ -1248,6 +1732,91 @@ export default function App() {
               )}
             </AnimatePresence>
           </div>
+
+          <div className="h-px bg-ink-900/5 mx-2 my-2" />
+
+          {/* Notes Section */}
+          <div className="space-y-1">
+            <button
+              onClick={() => setIsNotesExpanded(!isNotesExpanded)}
+              className={`w-full flex items-center justify-between p-2.5 rounded-2xl transition-all group ${
+                isNotesExpanded 
+                  ? 'bg-white text-ink-900 shadow-xl shadow-ink-900/5 ring-1 ring-ink-900/5' 
+                  : 'bg-white/50 border border-ink-900/5 hover:bg-white hover:shadow-md text-ink-900'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-deep-yellow`}>
+                  <Pencil size={16} fill="currentColor" />
+                </div>
+                <span className={`font-bold transition-all ${isNotesExpanded ? 'text-sm' : 'text-xs'}`}>Ghi chú ({userNotes.length})</span>
+              </div>
+              <ChevronDown size={16} className={`transition-transform duration-300 ${isNotesExpanded ? 'rotate-180 text-slate-400' : 'text-slate-300'}`} />
+            </button>
+
+            <AnimatePresence>
+              {isNotesExpanded && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
+                >
+                  <div className="pl-4 pr-0 pt-2 pb-1 space-y-2">
+                    {userNotes.length > 0 ? (
+                      userNotes.map(n => (
+                        <div key={n.id} className="flex items-start gap-2 group">
+                          <button
+                            onClick={() => {
+                              let docId = 'luat';
+                              if (n.articleId.includes('nd214')) docId = 'nd214';
+                              if (n.articleId.includes('tt79')) docId = 'tt79';
+                              
+                              if (docId === 'luat') {
+                                setActivePanes(prev => prev.includes('luat') ? prev : [...prev, 'luat'].sort((a,b) => ['luat','nd214','tt79'].indexOf(a) - ['luat','nd214','tt79'].indexOf(b)));
+                                handleSelectLuat([], n.articleId, n.id);
+                              }
+                              else if (docId === 'nd214') {
+                                setActivePanes(prev => prev.includes('nd214') ? prev : [...prev, 'nd214'].sort((a,b) => ['luat','nd214','tt79'].indexOf(a) - ['luat','nd214','tt79'].indexOf(b)));
+                                handleSelectNd([], n.articleId, n.id);
+                              }
+                              else if (docId === 'tt79') {
+                                setActivePanes(prev => prev.includes('tt79') ? prev : [...prev, 'tt79'].sort((a,b) => ['luat','nd214','tt79'].indexOf(a) - ['luat','nd214','tt79'].indexOf(b)));
+                                handleSelectTt([], n.articleId, n.id);
+                              }
+                            }}
+                            className="flex-1 text-left py-1.5 px-2 rounded-xl hover:bg-white border border-transparent hover:border-ink-900/5 hover:shadow-sm transition-all"
+                          >
+                            <div className="flex items-center gap-1 mb-0.5">
+                               <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: n.color === 'yellow' ? '#fef08a' : n.color === 'green' ? '#bbf7d0' : n.color === 'blue' ? '#bfdbfe' : n.color === 'pink' ? '#fbcfe8' : n.color === 'purple' ? '#e9d5ff' : '#fef08a' }} />
+                               <div className="text-[9px] uppercase font-black tracking-widest text-slate-400">
+                                 {n.articleId.includes('luat') || n.articleId.startsWith('LDT') ? 'Luật ĐT' : n.articleId.includes('nd214') ? 'NĐ 214' : 'TT 79'}
+                               </div>
+                            </div>
+                            <div className="text-[11px] font-semibold text-ink-900 line-clamp-2 leading-snug">
+                              {n.note || `"${n.text}"`}
+                            </div>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteNote(n.id)}
+                            className="p-2 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-lg mt-1 transition-colors"
+                            title="Xóa ghi chú"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="py-4 text-center">
+                        <p className="text-xs italic text-slate-400">Bạn chưa có ghi chú nào.</p>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </nav>
 
         <div className="p-4 border-t border-ink-900/5 mt-auto">
@@ -1264,7 +1833,7 @@ export default function App() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
         <header 
-          className="shrink-0 bg-cream-100 backdrop-blur-xl border-b border-ink-900/5 p-4 lg:py-4 lg:px-6 flex items-center gap-4 lg:gap-6 z-30 relative overflow-hidden"
+          className="shrink-0 bg-cream-100 backdrop-blur-xl border-b border-ink-900/5 p-4 lg:py-4 lg:px-6 flex items-center gap-4 lg:gap-6 z-30 relative"
         >
           {/* Decorative Snowflakes */}
           <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
@@ -1303,16 +1872,15 @@ export default function App() {
           </button>
 
           <div className={`flex-1 relative flex gap-3 z-10 transition-all duration-500 w-full max-w-4xl`}>
-            <div className="relative flex-1 group">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-deep-yellow transition-colors" size={18} />
-              <input
-                type="text"
-                placeholder='Tìm kiếm chương, điều, nội dung...'
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-6 py-2.5 bg-white border border-ink-900/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-deep-yellow/10 focus:border-deep-yellow/50 transition-all text-sm shadow-sm text-ink-900 font-medium placeholder:text-slate-400"
-              />
-            </div>
+            <AutocompleteInput
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Tìm kiếm chương, điều, nội dung..."
+              className="w-full pl-12 pr-6 py-2.5 bg-white border border-ink-900/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-deep-yellow/10 focus:border-deep-yellow/50 transition-all text-sm shadow-sm text-ink-900 font-medium placeholder:text-slate-400"
+              containerClassName="flex-1 group"
+              iconSize={18}
+              showClear={false}
+            />
             {searchQuery && (
                <button 
                  onClick={() => setSearchQuery("")}
@@ -1399,31 +1967,25 @@ export default function App() {
                      animate={{ opacity: 1, scale: 1 }}
                      exit={{ opacity: 0, scale: 0.95 }}
                      transition={{ duration: 0.3, ease: 'easeInOut' }}
-                     className={`flex-1 min-w-0 h-full relative lg:rounded-2xl overflow-hidden flex flex-col min-h-[50vh] lg:min-h-0 lg:border lg:border-white/10 lg:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] bg-slate-900 ${activePanes.length === 1 ? 'max-w-full' : ''}`}
+                     className={`flex-1 min-w-0 h-full relative lg:rounded-2xl flex flex-col min-h-[50vh] lg:min-h-0 lg:border lg:border-white/10 lg:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] bg-slate-900 ${activePanes.length === 1 ? 'max-w-full' : ''}`}
                    >
-             <div className="bg-slate-800/90 backdrop-blur py-3 px-4 lg:px-6 border-b border-white/5 font-bold text-white flex items-center justify-between gap-4 z-20">
+             <div className="bg-slate-800/90 backdrop-blur py-3 px-4 lg:px-6 border-b border-white/5 font-bold text-white flex items-center justify-between gap-4 z-20 lg:rounded-t-2xl">
                  <div className="flex items-center gap-2 shrink-0">
                    <BookOpen size={18} className="text-amber-400" />
                    <span className="hidden sm:inline">Luật Đấu Thầu</span>
                  </div>
                  {/*  Search bar here */}
-                 <div className="relative flex-1 max-w-sm group">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-amber-400 transition-colors" size={14} />
-                    <input
-                      type="text"
-                      placeholder='Tìm trong Luật...'
-                      value={searchQueryLuat}
-                      onChange={(e) => setSearchQueryLuat(e.target.value)}
-                      className="w-full pl-9 pr-8 py-1.5 bg-slate-900/50 border border-white/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-500/50 transition-all text-xs shadow-sm text-white font-normal placeholder:text-slate-500"
-                    />
-                    {searchQueryLuat && (
-                       <button onClick={() => setSearchQueryLuat("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors">
-                         <X size={14} />
-                       </button>
-                    )}
-                 </div>
+                 <AutocompleteInput
+                   value={searchQueryLuat}
+                   onChange={setSearchQueryLuat}
+                   placeholder="Tìm trong Luật..."
+                   className="w-full pl-9 pr-8 py-1.5 bg-slate-900/50 border border-white/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-500/50 transition-all text-xs shadow-sm text-white font-normal placeholder:text-slate-500"
+                   containerClassName="flex-1 max-w-sm group"
+                   iconSize={14}
+                   dark={true}
+                 />
              </div>
-             <div className="flex-1 overflow-hidden relative">
+             <div className="flex-1 overflow-hidden relative lg:rounded-b-2xl">
                <DocumentPane 
                   docData={DOCUMENTS[0]} 
                   allArticles={allLawArticles} 
@@ -1456,31 +2018,25 @@ export default function App() {
                  animate={{ opacity: 1, scale: 1 }}
                  exit={{ opacity: 0, scale: 0.95 }}
                  transition={{ duration: 0.3, ease: 'easeInOut' }}
-                 className={`flex-1 min-w-0 h-full relative lg:rounded-2xl overflow-hidden flex flex-col min-h-[50vh] lg:min-h-0 bg-slate-900 lg:border lg:border-white/10 lg:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] ${activePanes.length === 1 ? 'max-w-full' : ''}`}
+                 className={`flex-1 min-w-0 h-full relative lg:rounded-2xl flex flex-col min-h-[50vh] lg:min-h-0 bg-slate-900 lg:border lg:border-white/10 lg:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] ${activePanes.length === 1 ? 'max-w-full' : ''}`}
                >
-                 <div className="bg-slate-800/90 backdrop-blur py-3 px-4 lg:px-6 border-b border-white/5 font-bold text-white flex items-center justify-between gap-4 z-20">
+                 <div className="bg-slate-800/90 backdrop-blur py-3 px-4 lg:px-6 border-b border-white/5 font-bold text-white flex items-center justify-between gap-4 z-20 lg:rounded-t-2xl">
                  <div className="flex items-center gap-2 shrink-0">
                    <ScrollText size={18} className="text-amber-400" />
                    <span className="hidden sm:inline">Nghị định 214</span>
                  </div>
                  {/*  Search bar here */}
-                 <div className="relative flex-1 max-w-sm group">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-amber-400 transition-colors" size={14} />
-                    <input
-                      type="text"
-                      placeholder='Tìm trong Nghị định...'
-                      value={searchQueryNd}
-                      onChange={(e) => setSearchQueryNd(e.target.value)}
-                      className="w-full pl-9 pr-8 py-1.5 bg-slate-900/50 border border-white/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-500/50 transition-all text-xs shadow-sm text-white font-normal placeholder:text-slate-500"
-                    />
-                    {searchQueryNd && (
-                       <button onClick={() => setSearchQueryNd("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors">
-                         <X size={14} />
-                       </button>
-                    )}
-                 </div>
+                 <AutocompleteInput
+                   value={searchQueryNd}
+                   onChange={setSearchQueryNd}
+                   placeholder="Tìm trong Nghị định..."
+                   className="w-full pl-9 pr-8 py-1.5 bg-slate-900/50 border border-white/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-500/50 transition-all text-xs shadow-sm text-white font-normal placeholder:text-slate-500"
+                   containerClassName="flex-1 max-w-sm group"
+                   iconSize={14}
+                   dark={true}
+                 />
              </div>
-             <div className="flex-1 overflow-hidden relative">
+             <div className="flex-1 overflow-hidden relative lg:rounded-b-2xl">
                <DocumentPane 
                   docData={nghiDinh214Data} 
                   allArticles={allNd214Articles} 
@@ -1513,31 +2069,25 @@ export default function App() {
                  animate={{ opacity: 1, scale: 1 }}
                  exit={{ opacity: 0, scale: 0.95 }}
                  transition={{ duration: 0.3, ease: 'easeInOut' }}
-                 className={`flex-1 min-w-0 h-full relative lg:rounded-2xl overflow-hidden flex flex-col min-h-[50vh] lg:min-h-0 bg-slate-900 lg:border lg:border-white/10 lg:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] ${activePanes.length === 1 ? 'max-w-full' : ''}`}
+                 className={`flex-1 min-w-0 h-full relative lg:rounded-2xl flex flex-col min-h-[50vh] lg:min-h-0 bg-slate-900 lg:border lg:border-white/10 lg:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] ${activePanes.length === 1 ? 'max-w-full' : ''}`}
                >
-                 <div className="bg-slate-800/90 backdrop-blur py-3 px-4 lg:px-6 border-b border-white/5 font-bold text-white flex items-center justify-between gap-4 z-20">
+                 <div className="bg-slate-800/90 backdrop-blur py-3 px-4 lg:px-6 border-b border-white/5 font-bold text-white flex items-center justify-between gap-4 z-20 lg:rounded-t-2xl">
                  <div className="flex items-center gap-2 shrink-0">
                    <BookOpen size={18} className="text-amber-400" />
                    <span className="hidden sm:inline">Thông tư 79</span>
                  </div>
                  {/*  Search bar here */}
-                 <div className="relative flex-1 max-w-sm group">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-amber-400 transition-colors" size={14} />
-                    <input
-                      type="text"
-                      placeholder='Tìm trong Thông tư...'
-                      value={searchQueryTt}
-                      onChange={(e) => setSearchQueryTt(e.target.value)}
-                      className="w-full pl-9 pr-8 py-1.5 bg-slate-900/50 border border-white/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-500/50 transition-all text-xs shadow-sm text-white font-normal placeholder:text-slate-500"
-                    />
-                    {searchQueryTt && (
-                       <button onClick={() => setSearchQueryTt("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors">
-                         <X size={14} />
-                       </button>
-                    )}
-                 </div>
+                 <AutocompleteInput
+                   value={searchQueryTt}
+                   onChange={setSearchQueryTt}
+                   placeholder="Tìm trong Thông tư..."
+                   className="w-full pl-9 pr-8 py-1.5 bg-slate-900/50 border border-white/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-500/50 transition-all text-xs shadow-sm text-white font-normal placeholder:text-slate-500"
+                   containerClassName="flex-1 max-w-sm group"
+                   iconSize={14}
+                   dark={true}
+                 />
              </div>
-             <div className="flex-1 overflow-hidden relative">
+             <div className="flex-1 overflow-hidden relative lg:rounded-b-2xl">
                <DocumentPane 
                   docData={thongTu79Data} 
                   allArticles={allTt79Articles} 
@@ -1652,6 +2202,20 @@ export default function App() {
             <Pencil size={15} />
             Ghi chú
           </button>
+        </div>
+      )}
+
+      {globalTooltip && (
+        <div 
+          className="fixed z-[100] translate-x-[-50%] translate-y-[-100%] pointer-events-none animate-in fade-in slide-in-from-bottom-2 duration-300"
+          style={{ top: globalTooltip.top, left: globalTooltip.left }}
+        >
+          <div className="bg-gradient-to-br from-pink-50 to-pink-100 text-pink-700 text-[13px] p-3 rounded-2xl shadow-xl shadow-pink-500/20 border-2 border-pink-200 relative px-4 font-bold flex items-center gap-2 leading-tight w-max max-w-xs">
+            <MessageCircleHeart size={18} className="shrink-0 -mt-0.5 text-pink-500" />
+            <span className="whitespace-pre-wrap">{globalTooltip.content}</span>
+            <div className="absolute top-full -mt-[2px] border-[8px] border-transparent border-t-pink-200" style={{ left: `calc(50% + ${globalTooltip.arrowOffset}px)`, transform: 'translateX(-50%)' }} />
+            <div className="absolute top-full -mt-[5px] border-[8px] border-transparent border-t-pink-100" style={{ left: `calc(50% + ${globalTooltip.arrowOffset}px)`, transform: 'translateX(-50%)' }} />
+          </div>
         </div>
       )}
 
