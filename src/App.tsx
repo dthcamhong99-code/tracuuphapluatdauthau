@@ -206,11 +206,11 @@ function DocumentPane({
                     <div
                       key={art.id}
                       id={`${docData.id}-art-${art.id}`}
-                      className="bg-white rounded-xl border border-ink-900/5 shadow-sm hover:shadow-md transition-all duration-300 overflow-visible mb-4 last:mb-0 scroll-mt-20"
+                      className="bg-white rounded-xl border border-ink-900/5 shadow-sm hover:shadow-md transition-all duration-300 overflow-visible mb-4 last:mb-0 scroll-mt-0"
                     >
                       <div 
                         onClick={() => handleToggle(art.id)}
-                        className={`w-full text-left cursor-pointer p-3 lg:p-4 flex items-center justify-between gap-4 transition-colors rounded-xl ${expandedArticleId === art.id ? 'bg-yellow-400 text-slate-900 sticky top-0 z-20 shadow-xl shadow-yellow-400/40' : 'hover:bg-cream-50'}`}
+                        className={`w-full text-left cursor-pointer p-3 lg:p-4 flex items-center justify-between gap-4 transition-colors ${expandedArticleId === art.id ? 'bg-yellow-400 text-slate-900 sticky top-0 z-20 shadow-md shadow-yellow-400/20 rounded-t-xl rounded-b-none' : 'hover:bg-cream-50 rounded-xl'}`}
                       >
                         <div className="flex items-center gap-4">
                           <div className={`font-bold px-2 py-0.5 border rounded-md transition-all shrink-0 whitespace-nowrap ${expandedArticleId === art.id ? 'border-slate-900/50 bg-yellow-400 text-slate-900 shadow-sm' : 'border-slate-200 text-ink-800'} text-xs lg:text-sm tracking-tight`}>
@@ -304,8 +304,8 @@ function DocumentPane({
 
                   return (
                     <div key={chapter.id} className="relative">
-                      <div id={`${docData.id}-chapter-${chapter.id}`} className="scroll-mt-5 sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md py-1.5 mb-3 rounded-lg px-3 border border-slate-200/40 flex items-center justify-between">
-                         <h3 className="font-semibold text-slate-500 text-[11px] lg:text-xs uppercase tracking-wider">
+                      <div id={`${docData.id}-chapter-${chapter.id}`} className="scroll-mt-0 sticky top-0 z-30 bg-slate-50/95 backdrop-blur-md h-[34px] mb-3 rounded-lg px-3 border border-slate-200/40 flex items-center justify-between">
+                         <h3 className="font-semibold text-slate-500 text-[11px] lg:text-xs uppercase tracking-wider leading-snug line-clamp-1" title={chapter.title}>
                             {chapter.title}
                          </h3>
                       </div>
@@ -314,10 +314,10 @@ function DocumentPane({
                       {chapter.articles?.some(a => currentArticles.some(ca => ca.id === a.id)) && (
                         <div className="space-y-4 mb-6 px-1 lg:px-2">
                           {chapter.articles.filter(a => currentArticles.some(ca => ca.id === a.id)).map((art) => (
-                            <div key={art.id} id={`${docData.id}-art-${art.id}`} className="scroll-mt-20 bg-white rounded-xl border border-ink-900/5 shadow-sm hover:shadow-md transition-all duration-300 overflow-visible mb-4 last:mb-0">
+                            <div key={art.id} id={`${docData.id}-art-${art.id}`} className="scroll-mt-[34px] bg-white rounded-xl border border-ink-900/5 shadow-sm hover:shadow-md transition-all duration-300 overflow-visible mb-4 last:mb-0">
                               <div 
-                                onClick={() => onToggleArticle(art.id)}
-                                className={`w-full text-left cursor-pointer p-2.5 lg:py-3 lg:px-4 flex items-center justify-between gap-3 transition-colors rounded-xl ${expandedArticleId === art.id ? 'bg-yellow-400 text-slate-900 sticky top-[34px] z-20 shadow-xl shadow-yellow-400/40' : 'hover:bg-cream-50'}`}
+                                onClick={() => handleToggle(art.id)}
+                                className={`w-full text-left cursor-pointer p-2.5 lg:py-3 lg:px-4 flex items-center justify-between gap-3 transition-colors ${expandedArticleId === art.id ? 'bg-yellow-400 text-slate-900 sticky top-[34px] z-20 shadow-md shadow-yellow-400/20 rounded-t-xl rounded-b-none' : 'hover:bg-cream-50 rounded-xl'}`}
                               >
                                 <div className="flex items-center gap-3">
                                   <div className={`font-bold px-2 py-0.5 border rounded-md transition-all shrink-0 whitespace-nowrap ${expandedArticleId === art.id ? 'border-slate-900/50 bg-yellow-400 text-slate-900 shadow-sm' : 'border-slate-200 text-ink-800'} text-xs lg:text-sm tracking-tight`}>
@@ -377,19 +377,19 @@ function DocumentPane({
                          if (!hasMatchingSectionArticles) return null;
 
                          return (
-                           <div key={section.id} id={`${docData.id}-section-${section.id}`} className="scroll-mt-5 mb-6 px-1 lg:px-3">
-                             <div className="flex flex-col gap-1 mb-3 pl-2.5 border-l-[1.5px] border-deep-yellow/70">
-                               <h4 className="font-semibold text-slate-500 text-[10px] lg:text-[11px] uppercase tracking-wider">
+                           <div key={section.id} id={`${docData.id}-section-${section.id}`} className="scroll-mt-[34px] mb-6 px-1 lg:px-3">
+                             <div className="flex flex-col gap-1 mb-3 pl-2.5 border-l-[1.5px] border-deep-yellow/70 sticky top-[34px] z-20 bg-slate-900 py-2">
+                               <h4 className="font-semibold text-slate-500 text-[10px] lg:text-[11px] uppercase tracking-wider line-clamp-1" title={section.title}>
                                  {section.title}
                                </h4>
                              </div>
                              
                              <div className="space-y-4 pl-0 lg:pl-2">
                                {section.articles.filter(a => currentArticles.some(ca => ca.id === a.id)).map((art) => (
-                                <div key={art.id} id={`${docData.id}-art-${art.id}`} className="scroll-mt-20 bg-white rounded-xl border border-ink-900/5 shadow-sm hover:shadow-md transition-all duration-300 overflow-visible mb-4 last:mb-0">
+                                <div key={art.id} id={`${docData.id}-art-${art.id}`} className="scroll-mt-[64px] bg-white rounded-xl border border-ink-900/5 shadow-sm hover:shadow-md transition-all duration-300 overflow-visible mb-4 last:mb-0">
                                   <div 
-                                    onClick={() => onToggleArticle(art.id)}
-                                    className={`w-full text-left cursor-pointer p-2.5 lg:py-3 lg:px-4 flex items-center justify-between gap-3 transition-colors rounded-xl ${expandedArticleId === art.id ? 'bg-yellow-400 text-slate-900 sticky top-[34px] z-20 shadow-xl shadow-yellow-400/40' : 'hover:bg-cream-50'}`}
+                                    onClick={() => handleToggle(art.id)}
+                                    className={`w-full text-left cursor-pointer p-2.5 lg:py-3 lg:px-4 flex items-center justify-between gap-3 transition-colors ${expandedArticleId === art.id ? 'bg-yellow-400 text-slate-900 sticky top-[64px] z-20 shadow-md shadow-yellow-400/20 rounded-t-xl rounded-b-none' : 'hover:bg-cream-50 rounded-xl'}`}
                                   >
                                     <div className="flex items-center gap-3">
                                       <div className={`font-bold px-2 py-0.5 border rounded-md transition-all shrink-0 whitespace-nowrap ${expandedArticleId === art.id ? 'border-slate-900/50 bg-yellow-400 text-slate-900 shadow-sm' : 'border-slate-200 text-ink-800'} text-xs lg:text-sm tracking-tight`}>

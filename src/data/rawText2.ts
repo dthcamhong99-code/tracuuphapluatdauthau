@@ -409,4 +409,4 @@ Hàng hóa, dịch vụ đặt hàng theo quy định của pháp luật quản 
 2. Trường hợp gói thầu đáp ứng điều kiện áp dụng của một trong các hình thức lựa chọn nhà thầu quy định tại điểm a và điểm c khoản 1 Điều 20 của Luật này nhưng chủ đầu tư quyết định không áp dụng các hình thức này thì được áp dụng một trong các hình thức quy định tại điểm b khoản 1 Điều 20 của Luật này mà không phải tuân thủ điều kiện của hình thức tương ứng.
 
 3. Chính phủ quy định chi tiết Điều này.
-\``;
+`;
