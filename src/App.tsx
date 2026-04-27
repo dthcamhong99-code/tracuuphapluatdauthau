@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef, useCallback, useEffect, useDeferredValue } from 'react';
-import { Search, ChevronRight, Gavel, BookOpen, AlertCircle, Info, Menu, X, ArrowLeft, Filter, ChevronDown, Scale, ScrollText, Snowflake, Download, Bookmark, MessageCircleHeart, Pencil, Target } from 'lucide-react';
+import { Search, ChevronRight, Gavel, BookOpen, AlertCircle, Info, Menu, X, ArrowLeft, Filter, ChevronDown, Scale, ScrollText, Snowflake, Download, Bookmark, MessageCircleHeart, Pencil, Target, FolderOpen, ClipboardCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { QRCodeSVG } from 'qrcode.react';
 import { DOCUMENTS, allLawArticles } from './data/lawData';
 import { nghiDinh214Data, allNd214Articles } from './data/nd214';
 import { thongTu79Data, allTt79Articles } from './data/tt79';
@@ -821,7 +822,7 @@ export default function App() {
   const [searchQueryLuat, setSearchQueryLuat] = useState("");
   const [searchQueryNd, setSearchQueryNd] = useState("");
   const [searchQueryTt, setSearchQueryTt] = useState("");
-  const [activePanes, setActivePanes] = useState<('luat' | 'nd214' | 'tt79')[]>(['luat', 'nd214', 'tt79']);
+  const [activePanes, setActivePanes] = useState<('luat' | 'nd214' | 'tt79')[]>(['luat']);
 
   const togglePane = (paneId: 'luat' | 'nd214' | 'tt79') => {
     setActivePanes(prev => {
@@ -846,6 +847,7 @@ export default function App() {
   const effectiveTtSearch = deferredSearchQueryTt.trim() || deferredSearchQuery.trim();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [showDocumentModal, setShowDocumentModal] = useState(false);
   const [showLegalBasis, setShowLegalBasis] = useState(false);
 
   interface BookmarkItem {
@@ -1300,8 +1302,8 @@ export default function App() {
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-deep-yellow-dark`}>
-                  <Scale size={16} />
+                <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-ink-900`}>
+                  <Scale size={20} />
                 </div>
                 <span className={`font-bold transition-all ${showLegalBasis ? 'text-sm' : 'text-xs'}`}>Pháp lý</span>
               </div>
@@ -1356,8 +1358,8 @@ export default function App() {
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-deep-yellow-dark`}>
-                  <Gavel size={16} />
+                <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-ink-900`}>
+                  <Gavel size={20} />
                 </div>
                 <span className={`font-bold transition-all ${isLuatSidebarExpanded ? 'text-sm' : 'text-xs'}`}>Luật Đấu Thầu</span>
               </div>
@@ -1492,8 +1494,8 @@ export default function App() {
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-deep-yellow-dark`}>
-                  <ScrollText size={16} />
+                <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-ink-900`}>
+                  <ClipboardCheck size={20} />
                 </div>
                 <span className={`font-bold transition-all ${isNdSidebarExpanded ? 'text-sm' : 'text-xs'}`}>Nghị định 214</span>
               </div>
@@ -1579,8 +1581,8 @@ export default function App() {
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-deep-yellow-dark`}>
-                  <BookOpen size={16} />
+                <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-ink-900`}>
+                  <BookOpen size={20} />
                 </div>
                 <span className={`font-bold transition-all ${isTtSidebarExpanded ? 'text-sm' : 'text-xs'}`}>Thông tư 79</span>
               </div>
@@ -1819,12 +1821,19 @@ export default function App() {
           </div>
         </nav>
 
-        <div className="p-4 border-t border-ink-900/5 mt-auto">
+        <div className="p-4 border-t border-ink-900/5 mt-auto flex flex-col gap-3">
+          <button 
+            onClick={() => setShowDocumentModal(true)}
+            className="w-full flex items-center justify-center gap-2 py-3 px-3 bg-white border border-ink-900/5 rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] text-ink-800 hover:bg-cream-50 transition-all shadow-sm hover:shadow-md"
+          >
+            <FolderOpen size={18} fill="#facc15" stroke="currentColor" />
+            Tài liệu
+          </button>
           <button 
             onClick={() => setShowDisclaimer(true)}
             className="w-full flex items-center justify-center gap-2 py-3 px-3 bg-white border border-ink-900/5 rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] text-ink-800 hover:bg-cream-50 transition-all shadow-sm hover:shadow-md"
           >
-            <AlertCircle size={14} />
+            <AlertCircle size={18} fill="#facc15" stroke="currentColor" />
             Miễn trừ
           </button>
         </div>
@@ -1910,21 +1919,21 @@ export default function App() {
                 onClick={() => togglePane('luat')}
                 className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 border border-transparent ${activePanes.includes('luat') ? 'bg-yellow-400 text-slate-900 shadow-md shadow-yellow-400/20' : 'bg-white text-slate-400 hover:text-slate-500 border-white/10'}`}
              >
-                <Gavel size={12} className={activePanes.includes('luat') ? 'text-slate-900' : 'text-slate-400'} />
+                <Gavel size={16} className={activePanes.includes('luat') ? 'text-slate-900' : 'text-slate-400'} />
                 Luật Đấu Thầu
              </button>
              <button
                 onClick={() => togglePane('nd214')}
                 className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 border border-transparent ${activePanes.includes('nd214') ? 'bg-yellow-400 text-slate-900 shadow-md shadow-yellow-400/20' : 'bg-white text-slate-400 hover:text-slate-500 border-white/10'}`}
              >
-                <ScrollText size={12} className={activePanes.includes('nd214') ? 'text-slate-900' : 'text-slate-400'} />
+                <ClipboardCheck size={16} className={activePanes.includes('nd214') ? 'text-slate-900' : 'text-slate-400'} />
                 Nghị định 214
              </button>
              <button
                 onClick={() => togglePane('tt79')}
                 className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 border border-transparent ${activePanes.includes('tt79') ? 'bg-yellow-400 text-slate-900 shadow-md shadow-yellow-400/20' : 'bg-white text-slate-400 hover:text-slate-500 border-white/10'}`}
              >
-                <BookOpen size={12} className={activePanes.includes('tt79') ? 'text-slate-900' : 'text-slate-400'} />
+                <BookOpen size={16} className={activePanes.includes('tt79') ? 'text-slate-900' : 'text-slate-400'} />
                 Thông tư 79
              </button>
 
@@ -2022,7 +2031,7 @@ export default function App() {
                >
                  <div className="bg-slate-800/90 backdrop-blur py-3 px-4 lg:px-6 border-b border-white/5 font-bold text-white flex items-center justify-between gap-4 z-20 lg:rounded-t-2xl">
                  <div className="flex items-center gap-2 shrink-0">
-                   <ScrollText size={18} className="text-amber-400" />
+                   <ClipboardCheck size={18} className="text-amber-400" />
                    <span className="hidden sm:inline">Nghị định 214</span>
                  </div>
                  {/*  Search bar here */}
@@ -2139,8 +2148,8 @@ export default function App() {
               >
                 <X size={18} />
               </button>
-              <div className="w-12 h-12 mx-auto bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mb-5">
-                <AlertCircle size={24} />
+              <div className="w-12 h-12 mx-auto bg-amber-100 text-slate-800 rounded-2xl flex items-center justify-center mb-5">
+                <AlertCircle size={24} fill="#facc15" stroke="currentColor" />
               </div>
               <h2 className="text-xl font-bold text-slate-800 mb-4 tracking-tight text-center">Miễn trừ</h2>
               <div className="text-slate-600 leading-relaxed text-[13px] text-justify italic space-y-2.5 font-medium px-1">
@@ -2154,6 +2163,58 @@ export default function App() {
               >
                 Tôi đã hiểu
               </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Document Modal */}
+      <AnimatePresence>
+        {showDocumentModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowDocumentModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl mx-4 text-center"
+            >
+              <button 
+                onClick={() => setShowDocumentModal(false)}
+                className="absolute right-5 top-5 text-slate-400 hover:text-slate-600 bg-slate-50 hover:bg-slate-100 p-2 rounded-full transition-colors"
+               >
+                <X size={18} />
+              </button>
+              <div className="w-12 h-12 mx-auto bg-amber-100 text-slate-800 rounded-2xl flex items-center justify-center mb-5">
+                <FolderOpen size={24} fill="#facc15" stroke="currentColor" />
+              </div>
+              <h2 className="text-xl font-bold text-slate-800 mb-4 tracking-tight">Tài liệu</h2>
+              <div className="text-slate-600 leading-relaxed text-[14px] flex flex-col items-center space-y-4 font-medium px-1">
+                <p>
+                  Tải tài liệu tại: <a href="https://drive.google.com/drive/folders/1LZq_bi3N-0ymBm1veG84-wzK_TNVbXg5?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 hover:underline">Google Drive</a>
+                </p>
+                <p>Hoặc quét mã QR bên dưới:</p>
+                <div className="bg-white p-3 rounded-xl border border-slate-200">
+                  <QRCodeSVG 
+                    value="https://drive.google.com/drive/folders/1LZq_bi3N-0ymBm1veG84-wzK_TNVbXg5?usp=sharing" 
+                    size={160} 
+                    imageSettings={{
+                      src: "https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg",
+                      x: undefined,
+                      y: undefined,
+                      height: 32,
+                      width: 32,
+                      excavate: true,
+                    }}
+                  />
+                </div>
+              </div>
             </motion.div>
           </div>
         )}
