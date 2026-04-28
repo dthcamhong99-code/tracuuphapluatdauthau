@@ -1286,13 +1286,15 @@ d) Tiêu chuẩn xác định giá đánh giá (đối với trường hợp áp
 
 Trong đó:
 
-Điểm kỹ thuậtđang xét: là số điểm được xác định tại bước đánh giá về kỹ thuật của hồ sơ dự thầu đang xét;
+Điểm tổng hợp_đang xét = [(G_thấp nhất/G_đang xét)xT + (Điểm kỹ thuật_đang xét/Điểm kỹ thuật_cao nhất)xK] x 100
 
-Điểm kỹ thuậtcao nhất: là số điểm kỹ thuật cao nhất trong số các hồ sơ dự thầu đáp ứng về kỹ thuật;
+Điểm kỹ thuật_đang xét: là số điểm được xác định tại bước đánh giá về kỹ thuật của hồ sơ dự thầu đang xét;
 
-Gthấp nhất: là giá dự thầu sau sửa lỗi, hiệu chỉnh sai lệch trừ đi giá trị giảm giá (nếu có) thấp nhất của các hồ sơ dự thầu đáp ứng về kỹ thuật;
+Điểm kỹ thuật_cao nhất: là số điểm kỹ thuật cao nhất trong số các hồ sơ dự thầu đáp ứng về kỹ thuật;
 
-Gđang xét: là giá dự thầu sau sửa lỗi, hiệu chỉnh sai lệch trừ đi giá trị giảm giá (nếu có) của hồ sơ dự thầu đang xét;
+G_thấp nhất: là giá dự thầu sau sửa lỗi, hiệu chỉnh sai lệch trừ đi giá trị giảm giá (nếu có) thấp nhất của các hồ sơ dự thầu đáp ứng về kỹ thuật;
+
+G_đang xét: là giá dự thầu sau sửa lỗi, hiệu chỉnh sai lệch trừ đi giá trị giảm giá (nếu có) của hồ sơ dự thầu đang xét;
 
 K: Tỷ trọng điểm về kỹ thuật quy định trong thang điểm tổng hợp;
 
@@ -1858,27 +1860,27 @@ a) Xác định điểm giá:
 
 Sử dụng thang điểm thống nhất với thang điểm về kỹ thuật để xác định điểm giá. Điểm giá được xác định như sau:
 
-Điểm giá đang xét = \[Gthấp nhất x (thang điểm kỹ thuật)\]/ Gđang xét
+Điểm giá_đang xét = [G_thấp nhất x (thang điểm kỹ thuật)]/G_đang xét
 
 Trong đó:
 
-Điểm giá đang xét: Điểm giá của hồ sơ đề xuất về tài chính đang xét;
+Điểm giá_đang xét: Điểm giá của hồ sơ đề xuất về tài chính đang xét;
 
-Gthấp nhất: Giá dự thầu sau sửa lỗi, hiệu chỉnh sai lệch, trừ đi giá trị giảm giá (nếu có) thấp nhất trong số các nhà thầu được đánh giá chi tiết về tài chính;
+G_thấp nhất: Giá dự thầu sau sửa lỗi, hiệu chỉnh sai lệch, trừ đi giá trị giảm giá (nếu có) thấp nhất trong số các nhà thầu được đánh giá chi tiết về tài chính;
 
-Gđang xét: Giá dự thầu sau sửa lỗi, hiệu chỉnh sai lệch, trừ đi giá trị giảm giá (nếu có) của hồ sơ đề xuất về tài chính đang xét.
+G_đang xét: Giá dự thầu sau sửa lỗi, hiệu chỉnh sai lệch, trừ đi giá trị giảm giá (nếu có) của hồ sơ đề xuất về tài chính đang xét.
 
 b) Tiêu chuẩn đánh giá tổng hợp:
 
 Điểm tổng hợp được xác định theo công thức sau đây:
 
-Điểm tổng hợpđang xét = K x Điểm kỹ thuậtđang xét + G × Điểm giá đang xét
+Điểm tổng hợp_đang xét = K x Điểm kỹ thuật_đang xét + G × Điểm giá_đang xét
 
 Trong đó:
 
-Điểm kỹ thuậtđang xét: là số điểm được xác định tại bước đánh giá về kỹ thuật;
+Điểm kỹ thuật_đang xét: là số điểm được xác định tại bước đánh giá về kỹ thuật;
 
-Điểm giáđang xét: là số điểm được xác định tại bước đánh giá về giá;
+Điểm giá_đang xét: là số điểm được xác định tại bước đánh giá về giá;
 
 K: tỷ trọng điểm về kỹ thuật quy định trong thang điểm tổng hợp, chiếm tỷ lệ từ 70% đến 80%;
 
