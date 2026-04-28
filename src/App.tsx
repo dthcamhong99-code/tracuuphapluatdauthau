@@ -1699,16 +1699,25 @@ export default function App() {
                         <div key={b.articleId} className="flex items-start gap-2 group">
                           <button
                             onClick={() => {
+                              let docId = b.docId as 'luat' | 'nd214' | 'tt79';
+                              
+                              if (searchQuery.trim()) {
+                                setSearchQuery('');
+                                setActivePanes([docId]);
+                              } else {
+                                setActivePanes(prev => {
+                                  if (prev.includes(docId)) return prev;
+                                  return [...prev, docId].sort((a,b) => ['luat','nd214','tt79'].indexOf(a) - ['luat','nd214','tt79'].indexOf(b)) as ('luat'|'nd214'|'tt79')[];
+                                });
+                              }
+                              
                               if (b.docId === 'luat') {
-                                setActivePanes(prev => prev.includes('luat') ? prev : [...prev, 'luat'].sort((a,b) => ['luat','nd214','tt79'].indexOf(a) - ['luat','nd214','tt79'].indexOf(b)));
                                 handleSelectLuat([], b.articleId);
                               }
                               else if (b.docId === 'nd214') {
-                                setActivePanes(prev => prev.includes('nd214') ? prev : [...prev, 'nd214'].sort((a,b) => ['luat','nd214','tt79'].indexOf(a) - ['luat','nd214','tt79'].indexOf(b)));
                                 handleSelectNd([], b.articleId);
                               }
                               else if (b.docId === 'tt79') {
-                                setActivePanes(prev => prev.includes('tt79') ? prev : [...prev, 'tt79'].sort((a,b) => ['luat','nd214','tt79'].indexOf(a) - ['luat','nd214','tt79'].indexOf(b)));
                                 handleSelectTt([], b.articleId);
                               }
                             }}
@@ -1777,20 +1786,27 @@ export default function App() {
                         <div key={n.id} className="flex items-start gap-2 group">
                           <button
                             onClick={() => {
-                              let docId = 'luat';
+                              let docId = 'luat' as 'luat' | 'nd214' | 'tt79';
                               if (n.articleId.includes('nd214')) docId = 'nd214';
                               if (n.articleId.includes('tt79')) docId = 'tt79';
                               
+                              if (searchQuery.trim()) {
+                                setSearchQuery('');
+                                setActivePanes([docId]);
+                              } else {
+                                setActivePanes(prev => {
+                                  if (prev.includes(docId)) return prev;
+                                  return [...prev, docId].sort((a,b) => ['luat','nd214','tt79'].indexOf(a) - ['luat','nd214','tt79'].indexOf(b)) as ('luat'|'nd214'|'tt79')[];
+                                });
+                              }
+                              
                               if (docId === 'luat') {
-                                setActivePanes(prev => prev.includes('luat') ? prev : [...prev, 'luat'].sort((a,b) => ['luat','nd214','tt79'].indexOf(a) - ['luat','nd214','tt79'].indexOf(b)));
                                 handleSelectLuat([], n.articleId, n.id);
                               }
                               else if (docId === 'nd214') {
-                                setActivePanes(prev => prev.includes('nd214') ? prev : [...prev, 'nd214'].sort((a,b) => ['luat','nd214','tt79'].indexOf(a) - ['luat','nd214','tt79'].indexOf(b)));
                                 handleSelectNd([], n.articleId, n.id);
                               }
                               else if (docId === 'tt79') {
-                                setActivePanes(prev => prev.includes('tt79') ? prev : [...prev, 'tt79'].sort((a,b) => ['luat','nd214','tt79'].indexOf(a) - ['luat','nd214','tt79'].indexOf(b)));
                                 handleSelectTt([], n.articleId, n.id);
                               }
                             }}
