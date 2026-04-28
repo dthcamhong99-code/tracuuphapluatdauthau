@@ -597,45 +597,7 @@ function NoteModal({
   );
 }
 
-const KEYWORD_SUGGESTIONS = [
-  "Chỉ định thầu",                 
-  "Đấu thầu rộng rãi",             
-  "Đấu thầu hạn chế",              
-  "Chào hàng cạnh tranh",          
-  "Mua sắm trực tiếp",             
-  "Lựa chọn nhà thầu",             
-  "Tổ chuyên gia",                 
-  "Tổ thẩm định",                  
-  "Bảo đảm dự thầu",               
-  "Bảo đảm thực hiện hợp đồng",    
-  "Hồ sơ mời thầu",                
-  "Hồ sơ dự thầu",                 
-  "Hợp đồng trọn gói",             
-  "Hợp đồng theo đơn giá",         
-  "Đơn giá cố định",
-  "Đơn giá điều chỉnh",
-  "Tự thực hiện",
-  "Cung cấp dịch vụ tư vấn",
-  "Tùy chọn mua thêm",
-  "Chi phí xét thầu",
-  "Đấu thầu qua mạng",
-  "Chỉ có 01 nhà thầu tham dự",
-  "Chỉ có 01 nhà thầu đáp ứng",
-  "Chỉ có 01 nhà thầu vượt qua bước đánh giá kỹ thuật",
-  "Chỉ có 1 nhà thầu",
-  "Tham gia đấu thầu",
-  "Hủy thầu",
-  "Bảo lãnh tạm ứng",
-  "Giá gói thầu",
-  "Giá dự thầu",
-  "Thời gian chuẩn bị hồ sơ",
-  "Kết quả lựa chọn nhà thầu",
-  "Làm rõ hồ sơ",
-  "Sửa đổi hồ sơ mời thầu",
-  "Đăng tải thông tin",
-  "Chủ đầu tư",
-  "Bên mời thầu",
-];
+const KEYWORD_SUGGESTIONS: string[] = [];
 
 // Helper to extract relevant phrases dynamically
 function extractPhrases(query: string): string[] {
@@ -845,6 +807,43 @@ export default function App() {
   const effectiveLuatSearch = deferredSearchQueryLuat.trim() || deferredSearchQuery.trim();
   const effectiveNdSearch = deferredSearchQueryNd.trim() || deferredSearchQuery.trim();
   const effectiveTtSearch = deferredSearchQueryTt.trim() || deferredSearchQuery.trim();
+
+  useEffect(() => {
+    const query = deferredSearchQuery.trim();
+    if (query) {
+      const q = query.toLowerCase();
+      const hasMatch = (docData: any) => docData.chapters.some((ch: any) => 
+        ch.title.toLowerCase().includes(q) ||
+        (ch.sections?.some((s: any) => s.title.toLowerCase().includes(q) || s.articles.some((a: any) => a.title.toLowerCase().includes(q) || a.content.toLowerCase().includes(q)))) ||
+        (ch.articles?.some((a: any) => a.title.toLowerCase().includes(q) || a.content.toLowerCase().includes(q)))
+      );
+
+      const matchLuat = hasMatch(DOCUMENTS[0]);
+      const matchNd = hasMatch(nghiDinh214Data);
+      const matchTt = hasMatch(thongTu79Data);
+
+      setActivePanes(prev => {
+         const newPanes = new Set(prev);
+         let changed = false;
+         
+         if (matchLuat && !newPanes.has('luat')) { newPanes.add('luat'); changed = true; }
+         if (!matchLuat && newPanes.has('luat')) { newPanes.delete('luat'); changed = true; }
+         
+         if (matchNd && !newPanes.has('nd214')) { newPanes.add('nd214'); changed = true; }
+         if (!matchNd && newPanes.has('nd214')) { newPanes.delete('nd214'); changed = true; }
+         
+         if (matchTt && !newPanes.has('tt79')) { newPanes.add('tt79'); changed = true; }
+         if (!matchTt && newPanes.has('tt79')) { newPanes.delete('tt79'); changed = true; }
+         
+         if (changed) {
+            const order = ['luat', 'nd214', 'tt79'];
+            return Array.from(newPanes).sort((a: any, b: any) => order.indexOf(a) - order.indexOf(b)) as ('luat' | 'nd214' | 'tt79')[];
+         }
+         return prev;
+      });
+    }
+  }, [deferredSearchQuery]);
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [showDocumentModal, setShowDocumentModal] = useState(false);
@@ -1969,7 +1968,7 @@ export default function App() {
                    <BookOpen size={32} strokeWidth={1.5} />
                  </div>
                  <h3 className="text-lg font-bold text-ink-900 mb-2">Chưa chọn văn bản nào</h3>
-                 <p className="text-slate-500 text-sm">Vui lòng chọn ít nhất một văn bản ở thanh công cụ phía trên để xem nội dung.</p>
+                 <p className="text-slate-500 text-sm">Vui lòng chọn ít nhất một văn bản ở thanh công cụ phía trên để xem nội dung hoặc nhập từ khóa tìm kiếm.</p>
                </div>
              </div>
            ) : (
