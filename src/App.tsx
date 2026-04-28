@@ -1109,6 +1109,10 @@ export default function App() {
        if (!selectedTtIds.includes(id)) handleSelectTt(id);
     }
 
+    if (!activePanes.includes(docId as any)) {
+      setActivePanes(prev => [...prev, docId as any]);
+    }
+
     // Scroll to the element
     setTimeout(() => {
       const element = document.getElementById(`${docId}-${type}-${id}`);
@@ -1119,6 +1123,7 @@ export default function App() {
   };
 
   const handleSelectLuat = (id: string | string[], articleId?: string, noteId?: string) => {
+    setActivePanes(prev => prev.includes('luat') ? prev : [...prev, 'luat']);
     if (Array.isArray(id)) {
       setSelectedLuatIds(id);
     } else {
@@ -1159,6 +1164,7 @@ export default function App() {
   };
 
   const handleSelectNd = (id: string | string[], articleId?: string, noteId?: string) => {
+    setActivePanes(prev => prev.includes('nd214') ? prev : [...prev, 'nd214']);
     if (Array.isArray(id)) {
       setSelectedNdIds(id);
     } else {
@@ -1199,6 +1205,7 @@ export default function App() {
   };
 
   const handleSelectTt = (id: string | string[], articleId?: string, noteId?: string) => {
+    setActivePanes(prev => prev.includes('tt79') ? prev : [...prev, 'tt79']);
     if (Array.isArray(id)) {
       setSelectedTtIds(id);
     } else {
@@ -1303,7 +1310,7 @@ export default function App() {
             >
               <div className="flex items-center gap-2.5">
                 <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-ink-900`}>
-                  <Scale size={20} />
+                  <Scale size={20} strokeWidth={1.5} />
                 </div>
                 <span className={`font-bold transition-all ${showLegalBasis ? 'text-sm' : 'text-xs'}`}>Pháp lý</span>
               </div>
@@ -1359,7 +1366,7 @@ export default function App() {
             >
               <div className="flex items-center gap-2.5">
                 <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-ink-900`}>
-                  <Gavel size={20} />
+                  <Gavel size={20} strokeWidth={1.5} />
                 </div>
                 <span className={`font-bold transition-all ${isLuatSidebarExpanded ? 'text-sm' : 'text-xs'}`}>Luật Đấu Thầu</span>
               </div>
@@ -1495,7 +1502,7 @@ export default function App() {
             >
               <div className="flex items-center gap-2.5">
                 <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-ink-900`}>
-                  <ClipboardCheck size={20} />
+                  <ClipboardCheck size={20} strokeWidth={1.5} />
                 </div>
                 <span className={`font-bold transition-all ${isNdSidebarExpanded ? 'text-sm' : 'text-xs'}`}>Nghị định 214</span>
               </div>
@@ -1582,7 +1589,7 @@ export default function App() {
             >
               <div className="flex items-center gap-2.5">
                 <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-ink-900`}>
-                  <BookOpen size={20} />
+                  <BookOpen size={20} strokeWidth={1.5} />
                 </div>
                 <span className={`font-bold transition-all ${isTtSidebarExpanded ? 'text-sm' : 'text-xs'}`}>Thông tư 79</span>
               </div>
@@ -1919,21 +1926,21 @@ export default function App() {
                 onClick={() => togglePane('luat')}
                 className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 border border-transparent ${activePanes.includes('luat') ? 'bg-yellow-400 text-slate-900 shadow-md shadow-yellow-400/20' : 'bg-white text-slate-400 hover:text-slate-500 border-white/10'}`}
              >
-                <Gavel size={16} className={activePanes.includes('luat') ? 'text-slate-900' : 'text-slate-400'} />
+                <Gavel size={16} strokeWidth={1.5} className={activePanes.includes('luat') ? 'text-slate-900' : 'text-slate-400'} />
                 Luật Đấu Thầu
              </button>
              <button
                 onClick={() => togglePane('nd214')}
                 className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 border border-transparent ${activePanes.includes('nd214') ? 'bg-yellow-400 text-slate-900 shadow-md shadow-yellow-400/20' : 'bg-white text-slate-400 hover:text-slate-500 border-white/10'}`}
              >
-                <ClipboardCheck size={16} className={activePanes.includes('nd214') ? 'text-slate-900' : 'text-slate-400'} />
+                <ClipboardCheck size={16} strokeWidth={1.5} className={activePanes.includes('nd214') ? 'text-slate-900' : 'text-slate-400'} />
                 Nghị định 214
              </button>
              <button
                 onClick={() => togglePane('tt79')}
                 className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 border border-transparent ${activePanes.includes('tt79') ? 'bg-yellow-400 text-slate-900 shadow-md shadow-yellow-400/20' : 'bg-white text-slate-400 hover:text-slate-500 border-white/10'}`}
              >
-                <BookOpen size={16} className={activePanes.includes('tt79') ? 'text-slate-900' : 'text-slate-400'} />
+                <BookOpen size={16} strokeWidth={1.5} className={activePanes.includes('tt79') ? 'text-slate-900' : 'text-slate-400'} />
                 Thông tư 79
              </button>
 
@@ -1959,7 +1966,7 @@ export default function App() {
              <div className="flex-1 flex items-center justify-center bg-white/50 backdrop-blur-sm lg:rounded-2xl border border-white/20">
                <div className="text-center p-8 max-w-md">
                  <div className="w-16 h-16 bg-deep-yellow/10 text-deep-yellow-dark rounded-full flex items-center justify-center mx-auto mb-4">
-                   <BookOpen size={32} />
+                   <BookOpen size={32} strokeWidth={1.5} />
                  </div>
                  <h3 className="text-lg font-bold text-ink-900 mb-2">Chưa chọn văn bản nào</h3>
                  <p className="text-slate-500 text-sm">Vui lòng chọn ít nhất một văn bản ở thanh công cụ phía trên để xem nội dung.</p>
@@ -1980,7 +1987,7 @@ export default function App() {
                    >
              <div className="bg-slate-800/90 backdrop-blur py-3 px-4 lg:px-6 border-b border-white/5 font-bold text-white flex items-center justify-between gap-4 z-20 lg:rounded-t-2xl">
                  <div className="flex items-center gap-2 shrink-0">
-                   <BookOpen size={18} className="text-amber-400" />
+                   <Gavel size={18} strokeWidth={1.5} className="text-amber-400" />
                    <span className="hidden sm:inline">Luật Đấu Thầu</span>
                  </div>
                  {/*  Search bar here */}
@@ -2031,7 +2038,7 @@ export default function App() {
                >
                  <div className="bg-slate-800/90 backdrop-blur py-3 px-4 lg:px-6 border-b border-white/5 font-bold text-white flex items-center justify-between gap-4 z-20 lg:rounded-t-2xl">
                  <div className="flex items-center gap-2 shrink-0">
-                   <ClipboardCheck size={18} className="text-amber-400" />
+                   <ClipboardCheck size={18} strokeWidth={1.5} className="text-amber-400" />
                    <span className="hidden sm:inline">Nghị định 214</span>
                  </div>
                  {/*  Search bar here */}
@@ -2082,7 +2089,7 @@ export default function App() {
                >
                  <div className="bg-slate-800/90 backdrop-blur py-3 px-4 lg:px-6 border-b border-white/5 font-bold text-white flex items-center justify-between gap-4 z-20 lg:rounded-t-2xl">
                  <div className="flex items-center gap-2 shrink-0">
-                   <BookOpen size={18} className="text-amber-400" />
+                   <BookOpen size={18} strokeWidth={1.5} className="text-amber-400" />
                    <span className="hidden sm:inline">Thông tư 79</span>
                  </div>
                  {/*  Search bar here */}
