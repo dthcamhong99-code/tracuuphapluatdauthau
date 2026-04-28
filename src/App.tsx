@@ -81,17 +81,7 @@ function DocumentPane({
   const handleToggle = (id: string) => {
     onToggleArticle(id);
     if (expandedArticleId !== id) {
-      setTimeout(() => {
-        const articleElement = document.getElementById(`${docData.id}-art-${id}`);
-        if (articleElement) {
-          const contentMatch = articleElement.querySelector('p mark');
-          if (contentMatch) {
-            contentMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          } else {
-            articleElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }
-      }, 150);
+      scrollToElement(`${docData.id}-art-${id}`, 'start', 1500, { type: 'search', text: deferredSearchQuery.trim() });
     }
   };
 
@@ -345,10 +335,10 @@ function DocumentPane({
                               <AnimatePresence>
                                 {expandedArticleId === art.id && (
                                   <motion.div
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: 'auto', opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.15, ease: "easeOut" }}
                                     className="overflow-hidden"
                                   >
                                     <div className="px-4 lg:px-5 pb-5 pt-3 border-t border-ink-900/5">
@@ -417,10 +407,10 @@ function DocumentPane({
                                   <AnimatePresence>
                                     {expandedArticleId === art.id && (
                                       <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: 'auto', opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.15, ease: "easeOut" }}
                                         className="overflow-hidden"
                                       >
                                         <div className="px-4 lg:px-5 pb-5 pt-3 border-t border-ink-900/5">
@@ -770,6 +760,91 @@ function AutocompleteInput({
   );
 }
 
+const scrollToElement = (elementId: string, block: ScrollLogicalPosition = 'start', maxWaitMs = 1500, markTarget?: { type: 'note', id?: string } | { type: 'search', text?: string }) => {
+  const startTime = Date.now();
+  
+  const tryScroll = () => {
+    const el = document.getElementById(elementId);
+    
+    if (!el) {
+      if (Date.now() - startTime < maxWaitMs) {
+        requestAnimationFrame(tryScroll);
+      }
+      return;
+    }
+
+    if (markTarget) {
+      const isExpanded = el.querySelector('.overflow-hidden');
+      if (!isExpanded) {
+        if (Date.now() - startTime < maxWaitMs) {
+          requestAnimationFrame(tryScroll);
+          return;
+        }
+      } else {
+        let mark: Element | null = null;
+        
+        if (markTarget.type === 'note') {
+           mark = document.getElementById(`note-${markTarget.id}`);
+        } else {
+           mark = el.querySelector('p mark:not([id^="note-"])');
+           if (!mark && markTarget.text) {
+              const searchRegex = new RegExp(markTarget.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+              const noteMarks = el.querySelectorAll('p mark[id^="note-"]');
+              for (let i = 0; i < noteMarks.length; i++) {
+                 if (searchRegex.test(noteMarks[i].textContent || '')) {
+                     mark = noteMarks[i];
+                     break;
+                 }
+              }
+           }
+        }
+           
+        if (!mark) {
+          if (Date.now() - startTime < maxWaitMs) {
+            requestAnimationFrame(tryScroll);
+            return;
+          } else {
+            // Fallback: If mark is never found, just scroll to the article
+            el.scrollIntoView({ behavior: 'smooth', block });
+            return;
+          }
+        }
+        
+        if (mark) {
+          const scrollContainer = el.closest('.overflow-y-auto');
+          if (scrollContainer && scrollContainer instanceof Element) {
+             const containerRect = scrollContainer.getBoundingClientRect();
+             const elRect = el.getBoundingClientRect();
+             const markRect = mark.getBoundingClientRect();
+             
+             const alignTopScroll = elRect.top - containerRect.top;
+             const markTopRelEl = markRect.top - elRect.top;
+             const halfContainer = containerRect.height / 2;
+             
+             // Calculate how much extra scroll we need to position the mark in the middle
+             const additionalScroll = Math.max(0, markTopRelEl - halfContainer + (markRect.height / 2));
+             const totalScroll = alignTopScroll + additionalScroll;
+             
+             if (totalScroll !== 0) {
+               scrollContainer.scrollBy({
+                 top: totalScroll,
+                 behavior: 'smooth'
+               });
+             }
+          } else {
+             mark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
+        }
+      }
+    }
+      
+    el.scrollIntoView({ behavior: 'smooth', block });
+  };
+  
+  requestAnimationFrame(tryScroll);
+};
+
 export default function App() {
   const [selectedLuatIds, setSelectedLuatIds] = useState<string[]>([]);
   const [expandedLuatArticleId, setExpandedLuatArticleId] = useState<string | null>(null);
@@ -1113,12 +1188,18 @@ export default function App() {
     }
 
     // Scroll to the element
-    setTimeout(() => {
-      const element = document.getElementById(`${docId}-${type}-${id}`);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    scrollToElement(`${docId}-${type}-${id}`, 'start');
+  };
+
+  const executeScroll = (articleId?: string, noteId?: string, docId?: string) => {
+    if (articleId && docId) {
+      if (noteId) {
+        scrollToElement(`${docId}-art-${articleId}`, 'start', 1500, { type: 'note', id: noteId });
+      } else {
+        const text = docId === 'luat' ? effectiveLuatSearch : docId === 'nd214' ? effectiveNdSearch : effectiveTtSearch;
+        scrollToElement(`${docId}-art-${articleId}`, 'start', 1500, { type: 'search', text });
       }
-    }, 150);
+    }
   };
 
   const handleSelectLuat = (id: string | string[], articleId?: string, noteId?: string) => {
@@ -1147,19 +1228,9 @@ export default function App() {
     }
     if (articleId) {
       setExpandedLuatArticleId(articleId);
-      setTimeout(() => {
-        if (noteId) {
-          const noteEl = document.getElementById(`note-${noteId}`);
-          if (noteEl) {
-            noteEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            return;
-          }
-        }
-        const el = document.getElementById(`luat-art-${articleId}`);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 150);
+      executeScroll(articleId, noteId, 'luat');
     }
-    if (window.innerWidth < 1024 && !Array.isArray(id) && !noteId) setIsSidebarOpen(false);
+    if (window.innerWidth < 1024 && (articleId || !Array.isArray(id))) setIsSidebarOpen(false);
   };
 
   const handleSelectNd = (id: string | string[], articleId?: string, noteId?: string) => {
@@ -1188,19 +1259,9 @@ export default function App() {
     }
     if (articleId) {
       setExpandedNdArticleId(articleId);
-      setTimeout(() => {
-        if (noteId) {
-          const noteEl = document.getElementById(`note-${noteId}`);
-          if (noteEl) {
-            noteEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            return;
-          }
-        }
-        const el = document.getElementById(`nd214-art-${articleId}`);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 150);
+      executeScroll(articleId, noteId, 'nd214');
     }
-    if (window.innerWidth < 1024 && !Array.isArray(id) && !noteId) setIsSidebarOpen(false);
+    if (window.innerWidth < 1024 && (articleId || !Array.isArray(id))) setIsSidebarOpen(false);
   };
 
   const handleSelectTt = (id: string | string[], articleId?: string, noteId?: string) => {
@@ -1229,19 +1290,9 @@ export default function App() {
     }
     if (articleId) {
       setExpandedTtArticleId(articleId);
-      setTimeout(() => {
-        if (noteId) {
-          const noteEl = document.getElementById(`note-${noteId}`);
-          if (noteEl) {
-            noteEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            return;
-          }
-        }
-        const el = document.getElementById(`tt79-art-${articleId}`);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 150);
+      executeScroll(articleId, noteId, 'tt79');
     }
-    if (window.innerWidth < 1024 && !Array.isArray(id) && !noteId) setIsSidebarOpen(false);
+    if (window.innerWidth < 1024 && (articleId || !Array.isArray(id))) setIsSidebarOpen(false);
   };
 
   return (
@@ -1701,8 +1752,11 @@ export default function App() {
                             onClick={() => {
                               let docId = b.docId as 'luat' | 'nd214' | 'tt79';
                               
-                              if (searchQuery.trim()) {
+                              if (searchQuery.trim() || searchQueryLuat || searchQueryNd || searchQueryTt) {
                                 setSearchQuery('');
+                                setSearchQueryLuat('');
+                                setSearchQueryNd('');
+                                setSearchQueryTt('');
                                 setActivePanes([docId]);
                               } else {
                                 setActivePanes(prev => {
@@ -1790,8 +1844,11 @@ export default function App() {
                               if (n.articleId.includes('nd214')) docId = 'nd214';
                               if (n.articleId.includes('tt79')) docId = 'tt79';
                               
-                              if (searchQuery.trim()) {
+                              if (searchQuery.trim() || searchQueryLuat || searchQueryNd || searchQueryTt) {
                                 setSearchQuery('');
+                                setSearchQueryLuat('');
+                                setSearchQueryNd('');
+                                setSearchQueryTt('');
                                 setActivePanes([docId]);
                               } else {
                                 setActivePanes(prev => {
