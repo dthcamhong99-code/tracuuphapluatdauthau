@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useCallback, useEffect, useDeferredValue } from 'react';
-import { Search, ChevronRight, Gavel, BookOpen, AlertCircle, Info, Menu, X, ArrowLeft, Filter, ChevronDown, Scale, ScrollText, Snowflake, Download, Bookmark, MessageCircleHeart, Pencil, Target, FolderOpen, ClipboardCheck } from 'lucide-react';
+import { Search, ChevronRight, Gavel, BookOpen, AlertCircle, Info, Menu, X, ArrowLeft, Filter, ChevronDown, Scale, ScrollText, Snowflake, Download, Bookmark, MessageCircleHeart, Pencil, Target, FolderOpen, ClipboardCheck, Pin, PinOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { QRCodeSVG } from 'qrcode.react';
 import { DOCUMENTS, allLawArticles } from './data/lawData';
@@ -81,7 +81,8 @@ function DocumentPane({
   const handleToggle = (id: string) => {
     onToggleArticle(id);
     if (expandedArticleId !== id) {
-      scrollToElement(`${docData.id}-art-${id}`, 'start', 1500, { type: 'search', text: deferredSearchQuery.trim() });
+      const query = deferredSearchQuery.trim();
+      scrollToElement(`${docData.id}-art-${id}`, 'start', 1500, query ? { type: 'search', text: query } : undefined);
     }
   };
 
@@ -159,9 +160,11 @@ function DocumentPane({
                   data-note-tooltip={el.note.note || ''}
                 >
                   <span className="italic px-0.5 pointer-events-none">{el.extText}</span>
-                  <span className="inline-flex relative -top-3 -left-1.5 align-top z-10 p-0.5 rounded-full bg-pink-500 text-white shadow-sm ring-2 ring-white hover:scale-110 transition-transform cursor-pointer pointer-events-none">
-                    <MessageCircleHeart size={14} />
-                  </span>
+                  {!!el.note.note?.trim() && (
+                    <span className="inline-flex relative -top-3 -left-1.5 align-top z-10 p-0.5 rounded-full bg-pink-500 text-white shadow-sm ring-2 ring-white hover:scale-110 transition-transform cursor-pointer pointer-events-none">
+                      <MessageCircleHeart size={14} />
+                    </span>
+                  )}
                 </mark>
               );
            }
@@ -332,14 +335,9 @@ function DocumentPane({
                                 </div>
                               </div>
 
-                              <AnimatePresence>
                                 {expandedArticleId === art.id && (
-                                  <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.15, ease: "easeOut" }}
-                                    className="overflow-hidden"
+                                  <div
+                                    className="overflow-hidden animate-in fade-in duration-150 ease-out"
                                   >
                                     <div className="px-4 lg:px-5 pb-5 pt-3 border-t border-ink-900/5">
                                       <div className="pr-2">
@@ -354,9 +352,8 @@ function DocumentPane({
                                         </div>
                                       </div>
                                     </div>
-                                  </motion.div>
+                                  </div>
                                 )}
-                              </AnimatePresence>
                             </div>
                           ))}
                         </div>
@@ -404,14 +401,9 @@ function DocumentPane({
                                     </div>
                                   </div>
 
-                                  <AnimatePresence>
                                     {expandedArticleId === art.id && (
-                                      <motion.div
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.15, ease: "easeOut" }}
-                                        className="overflow-hidden"
+                                      <div
+                                        className="overflow-hidden animate-in fade-in duration-150 ease-out"
                                       >
                                         <div className="px-4 lg:px-5 pb-5 pt-3 border-t border-ink-900/5">
                                           <div className="pr-2">
@@ -426,9 +418,8 @@ function DocumentPane({
                                             </div>
                                           </div>
                                         </div>
-                                      </motion.div>
+                                      </div>
                                     )}
-                                  </AnimatePresence>
                                 </div>
                                ))}
                              </div>
@@ -461,17 +452,19 @@ function NoteModal({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  initialData: { articleId: string, text: string, noteId?: string, noteContent?: string, color?: string } | null;
+  initialData: { articleId: string, text: string, noteId?: string, noteContent?: string, color?: string, isPinned?: boolean } | null;
   onSave: (note: UserNote) => void;
   onDelete?: (noteId: string) => void;
 }) {
   const [content, setContent] = useState('');
   const [color, setColor] = useState('yellow');
+  const [isPinned, setIsPinned] = useState(true);
 
   useEffect(() => {
     if (isOpen && initialData) {
       setContent(initialData.noteContent || '');
       setColor(initialData.color || 'yellow');
+      setIsPinned(initialData.isPinned ?? true);
     }
   }, [isOpen, initialData]);
 
@@ -515,7 +508,8 @@ function NoteModal({
                     articleId: initialData.articleId,
                     text: initialData.text,
                     note: content,
-                    color
+                    color,
+                    isPinned
                   });
                   onClose();
                 }
@@ -525,26 +519,36 @@ function NoteModal({
             />
           </div>
 
-          <div className="flex items-center gap-4">
-            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide shrink-0">
-              Màu sắc:
-            </label>
-            <div className="flex items-center gap-2.5">
-              {[
-                { id: 'yellow', hex: '#fef08a' },
-                { id: 'green', hex: '#bbf7d0' },
-                { id: 'blue', hex: '#bfdbfe' },
-                { id: 'pink', hex: '#fbcfe8' },
-                { id: 'purple', hex: '#e9d5ff' }
-              ].map(c => (
-                <button 
-                  key={c.id}
-                  onClick={() => setColor(c.id)}
-                  className={`w-7 h-7 rounded-full transition-all ${color === c.id ? 'border-2 border-slate-900 scale-110' : 'hover:scale-110 border border-slate-200 shadow-sm'}`}
-                  style={{ backgroundColor: c.hex }}
-                />
-              ))}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide shrink-0">
+                Màu sắc:
+              </label>
+              <div className="flex items-center gap-2.5">
+                {[
+                  { id: 'yellow', hex: '#fef08a' },
+                  { id: 'green', hex: '#bbf7d0' },
+                  { id: 'blue', hex: '#bfdbfe' },
+                  { id: 'pink', hex: '#fbcfe8' },
+                  { id: 'purple', hex: '#e9d5ff' }
+                ].map(c => (
+                  <button 
+                    key={c.id}
+                    onClick={() => setColor(c.id)}
+                    className={`w-7 h-7 rounded-full transition-all ${color === c.id ? 'border-2 border-slate-900 scale-110' : 'hover:scale-110 border border-slate-200 shadow-sm'}`}
+                    style={{ backgroundColor: c.hex }}
+                  />
+                ))}
+              </div>
             </div>
+            <button
+              onClick={() => setIsPinned(!isPinned)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${isPinned ? 'bg-amber-100 text-amber-700 hover:bg-amber-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+              title={isPinned ? 'Bỏ ghim khỏi Sidebar' : 'Ghim lên Sidebar'}
+            >
+              {isPinned ? <Pin size={16} className="fill-current" /> : <PinOff size={16} />}
+              {isPinned ? 'Đã ghim' : 'Ghim'}
+            </button>
           </div>
         </div>
 
@@ -573,7 +577,8 @@ function NoteModal({
                 articleId: initialData.articleId,
                 text: initialData.text,
                 note: content,
-                color
+                color,
+                isPinned
               });
               onClose();
             }}
@@ -773,76 +778,60 @@ const scrollToElement = (elementId: string, block: ScrollLogicalPosition = 'star
       return;
     }
 
-    if (markTarget) {
-      const isExpanded = el.querySelector('.overflow-hidden');
+    const isArticle = elementId.includes('-art-');
+    let isExpanded: Element | null = null;
+    if (isArticle) {
+      isExpanded = el.querySelector('.overflow-hidden');
       if (!isExpanded) {
         if (Date.now() - startTime < maxWaitMs) {
           requestAnimationFrame(tryScroll);
           return;
         }
+      }
+    }
+
+    if (markTarget && isExpanded) {
+      let mark: Element | null = null;
+      
+      if (markTarget.type === 'note') {
+         mark = document.getElementById(`note-${markTarget.id}`);
       } else {
-        let mark: Element | null = null;
-        
-        if (markTarget.type === 'note') {
-           mark = document.getElementById(`note-${markTarget.id}`);
+         mark = el.querySelector('p mark:not([id^="note-"])');
+         if (!mark && markTarget.text) {
+            const searchRegex = new RegExp(markTarget.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+            const noteMarks = el.querySelectorAll('p mark[id^="note-"]');
+            for (let i = 0; i < noteMarks.length; i++) {
+               if (searchRegex.test(noteMarks[i].textContent || '')) {
+                   mark = noteMarks[i];
+                   break;
+               }
+            }
+         }
+      }
+         
+      if (!mark) {
+        if (Date.now() - startTime < maxWaitMs) {
+          requestAnimationFrame(tryScroll);
+          return;
         } else {
-           mark = el.querySelector('p mark:not([id^="note-"])');
-           if (!mark && markTarget.text) {
-              const searchRegex = new RegExp(markTarget.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-              const noteMarks = el.querySelectorAll('p mark[id^="note-"]');
-              for (let i = 0; i < noteMarks.length; i++) {
-                 if (searchRegex.test(noteMarks[i].textContent || '')) {
-                     mark = noteMarks[i];
-                     break;
-                 }
-              }
-           }
-        }
-           
-        if (!mark) {
-          if (Date.now() - startTime < maxWaitMs) {
-            requestAnimationFrame(tryScroll);
-            return;
-          } else {
-            // Fallback: If mark is never found, just scroll to the article
-            el.scrollIntoView({ behavior: 'smooth', block });
-            return;
-          }
-        }
-        
-        if (mark) {
-          const scrollContainer = el.closest('.overflow-y-auto');
-          if (scrollContainer && scrollContainer instanceof Element) {
-             const containerRect = scrollContainer.getBoundingClientRect();
-             const elRect = el.getBoundingClientRect();
-             const markRect = mark.getBoundingClientRect();
-             
-             const alignTopScroll = elRect.top - containerRect.top;
-             const markTopRelEl = markRect.top - elRect.top;
-             const halfContainer = containerRect.height / 2;
-             
-             // Calculate how much extra scroll we need to position the mark in the middle
-             const additionalScroll = Math.max(0, markTopRelEl - halfContainer + (markRect.height / 2));
-             const totalScroll = alignTopScroll + additionalScroll;
-             
-             if (totalScroll !== 0) {
-               scrollContainer.scrollBy({
-                 top: totalScroll,
-                 behavior: 'smooth'
-               });
-             }
-          } else {
-             mark.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
+          // Fallback: If mark is never found, just scroll to the article
+          el.scrollIntoView({ behavior: 'smooth', block });
           return;
         }
+      }
+      
+      if (mark) {
+        setTimeout(() => {
+           mark!.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 50);
+        return;
       }
     }
       
     el.scrollIntoView({ behavior: 'smooth', block });
   };
   
-  requestAnimationFrame(tryScroll);
+  tryScroll();
 };
 
 export default function App() {
@@ -997,7 +986,7 @@ export default function App() {
     localStorage.setItem('legal_notes', JSON.stringify(userNotes));
   }, [userNotes]);
 
-  const [noteDraft, setNoteDraft] = useState<{ articleId: string, text: string, noteId?: string, noteContent?: string, color?: string } | null>(null);
+  const [noteDraft, setNoteDraft] = useState<{ articleId: string, text: string, noteId?: string, noteContent?: string, color?: string, isPinned?: boolean } | null>(null);
   const [selectionMenu, setSelectionMenu] = useState<{ top: number, left: number, text: string, articleId: string } | null>(null);
 
   useEffect(() => {
@@ -1197,7 +1186,7 @@ export default function App() {
         scrollToElement(`${docId}-art-${articleId}`, 'start', 1500, { type: 'note', id: noteId });
       } else {
         const text = docId === 'luat' ? effectiveLuatSearch : docId === 'nd214' ? effectiveNdSearch : effectiveTtSearch;
-        scrollToElement(`${docId}-art-${articleId}`, 'start', 1500, { type: 'search', text });
+        scrollToElement(`${docId}-art-${articleId}`, 'start', 1500, text ? { type: 'search', text } : undefined);
       }
     }
   };
@@ -1820,7 +1809,7 @@ export default function App() {
                 <div className={`p-2 rounded-lg transition-colors bg-cream-100 text-deep-yellow`}>
                   <Pencil size={16} fill="currentColor" />
                 </div>
-                <span className={`font-bold transition-all ${isNotesExpanded ? 'text-sm' : 'text-xs'}`}>Ghi chú ({userNotes.length})</span>
+                <span className={`font-bold transition-all ${isNotesExpanded ? 'text-sm' : 'text-xs'}`}>Ghi chú ({userNotes.filter(n => n.isPinned !== false).length})</span>
               </div>
               <ChevronDown size={16} className={`transition-transform duration-300 ${isNotesExpanded ? 'rotate-180 text-slate-400' : 'text-slate-300'}`} />
             </button>
@@ -1835,8 +1824,8 @@ export default function App() {
                   className="overflow-hidden"
                 >
                   <div className="pl-4 pr-0 pt-2 pb-1 space-y-2">
-                    {userNotes.length > 0 ? (
-                      userNotes.map(n => (
+                    {userNotes.filter(n => n.isPinned !== false).length > 0 ? (
+                      userNotes.filter(n => n.isPinned !== false).map(n => (
                         <div key={n.id} className="flex items-start gap-2 group">
                           <button
                             onClick={() => {
@@ -2090,7 +2079,7 @@ export default function App() {
                   bookmarkedIds={bookmarks.map(b => b.articleId)}
                   onToggleBookmark={(id, title) => handleToggleBookmark(id, 'luat', title)}
                   userNotes={userNotes}
-                  onNoteClick={(text, articleId, noteId) => setNoteDraft({ articleId, text, noteId, noteContent: userNotes.find(n => n.id === noteId)?.note, color: userNotes.find(n => n.id === noteId)?.color })}
+                  onNoteClick={(text, articleId, noteId) => setNoteDraft({ articleId, text, noteId, noteContent: userNotes.find(n => n.id === noteId)?.note, color: userNotes.find(n => n.id === noteId)?.color, isPinned: userNotes.find(n => n.id === noteId)?.isPinned })}
                />
              </div>
            </motion.div>
@@ -2141,7 +2130,7 @@ export default function App() {
                   bookmarkedIds={bookmarks.map(b => b.articleId)}
                   onToggleBookmark={(id, title) => handleToggleBookmark(id, 'nd214', title)}
                   userNotes={userNotes}
-                  onNoteClick={(text, articleId, noteId) => setNoteDraft({ articleId, text, noteId, noteContent: userNotes.find(n => n.id === noteId)?.note, color: userNotes.find(n => n.id === noteId)?.color })}
+                  onNoteClick={(text, articleId, noteId) => setNoteDraft({ articleId, text, noteId, noteContent: userNotes.find(n => n.id === noteId)?.note, color: userNotes.find(n => n.id === noteId)?.color, isPinned: userNotes.find(n => n.id === noteId)?.isPinned })}
                />
              </div>
            </motion.div>
@@ -2192,7 +2181,7 @@ export default function App() {
                   bookmarkedIds={bookmarks.map(b => b.articleId)}
                   onToggleBookmark={(id, title) => handleToggleBookmark(id, 'tt79', title)}
                   userNotes={userNotes}
-                  onNoteClick={(text, articleId, noteId) => setNoteDraft({ articleId, text, noteId, noteContent: userNotes.find(n => n.id === noteId)?.note, color: userNotes.find(n => n.id === noteId)?.color })}
+                  onNoteClick={(text, articleId, noteId) => setNoteDraft({ articleId, text, noteId, noteContent: userNotes.find(n => n.id === noteId)?.note, color: userNotes.find(n => n.id === noteId)?.color, isPinned: userNotes.find(n => n.id === noteId)?.isPinned })}
                />
              </div>
            </motion.div>
@@ -2320,7 +2309,8 @@ export default function App() {
                     articleId: selectionMenu.articleId,
                     text: selectionMenu.text,
                     note: '',
-                    color: c.id
+                    color: c.id,
+                    isPinned: false
                   });
                   setSelectionMenu(null);
                   window.getSelection()?.removeAllRanges();

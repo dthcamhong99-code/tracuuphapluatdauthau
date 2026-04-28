@@ -31,4 +31,5 @@ export interface UserNote {
   text: string;
   note: string;
   color: string; // e.g. '#fef08a'
+  isPinned?: boolean;
 }
