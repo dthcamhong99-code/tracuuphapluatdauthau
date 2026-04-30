@@ -10,38 +10,45 @@ import { logoBase64 } from './logoData';
 
 const RobotIcon = ({ size = 24, className = "" }) => (
   <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    {/* Shadow */}
-    <ellipse cx="50" cy="90" rx="20" ry="4" fill="#cbd5e1" opacity="0.8" />
+    {/* Base Shadow */}
+    <ellipse cx="50" cy="94" rx="28" ry="5" fill="#cbd5e1" opacity="0.6" />
+
+    {/* Ears */}
+    <rect x="11" y="35" width="9" height="18" rx="4.5" fill="#7dd3fc" stroke="#1e293b" strokeWidth="3.5" />
+    <rect x="80" y="35" width="9" height="18" rx="4.5" fill="#7dd3fc" stroke="#1e293b" strokeWidth="3.5" />
     
-    {/* Antenna Base/Line */}
-    <line x1="50" y1="30" x2="50" y2="16" stroke="#1e293b" strokeWidth="4" strokeLinecap="round" />
+    {/* Ear inner lines */}
+    <path d="M 15 40 Q 13 44 15 48" fill="none" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round" />
+    <path d="M 85 40 Q 87 44 85 48" fill="none" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round" />
+
+    {/* Antenna Stem */}
+    <line x1="50" y1="24" x2="50" y2="10" stroke="#1e293b" strokeWidth="3.5" strokeLinecap="round" />
+    
+    {/* Antenna Base */}
+    <path d="M 40 24 C 40 16 60 16 60 24 Z" fill="#f8fafc" stroke="#1e293b" strokeWidth="3.5" strokeLinejoin="round" />
     
     {/* Antenna Ball */}
-    <circle cx="50" cy="12" r="5" fill="#38bdf8" stroke="#1e293b" strokeWidth="4" />
+    <circle cx="50" cy="10" r="6" fill="#7dd3fc" stroke="#1e293b" strokeWidth="3.5" />
     
-    {/* Body */}
-    <path d="M 28 50 C 28 92, 72 92, 72 50 Z" fill="white" stroke="#1e293b" strokeWidth="4" strokeLinejoin="round" />
-    
-    {/* Arms */}
-    <g transform="rotate(20 18 64)">
-      <ellipse cx="18" cy="64" rx="6" ry="10" fill="white" stroke="#1e293b" strokeWidth="4" />
-    </g>
-    <g transform="rotate(-20 82 64)">
-      <ellipse cx="82" cy="64" rx="6" ry="10" fill="white" stroke="#1e293b" strokeWidth="4" />
-    </g>
+    {/* Main Body */}
+    <path d="M 30 50 L 70 50 C 85 75 65 92 50 92 C 35 92 15 75 30 50 Z" fill="#f8fafc" stroke="#1e293b" strokeWidth="3.5" strokeLinejoin="round" />
+
+    {/* Arms (Droplets) */}
+    <path d="M 26 62 C 10 66 10 82 16 86 C 24 88 28 76 26 62 Z" fill="#f8fafc" stroke="#1e293b" strokeWidth="3.5" strokeLinejoin="round" />
+    <path d="M 74 62 C 90 66 90 82 84 86 C 76 88 72 76 74 62 Z" fill="#f8fafc" stroke="#1e293b" strokeWidth="3.5" strokeLinejoin="round" />
 
     {/* Head */}
-    <rect x="20" y="28" width="60" height="42" rx="18" fill="white" stroke="#1e293b" strokeWidth="4" />
-    
-    {/* Screen */}
-    <rect x="28" y="36" width="44" height="26" rx="10" fill="#1e293b" />
+    <rect x="16" y="24" width="68" height="42" rx="21" fill="#f8fafc" stroke="#1e293b" strokeWidth="3.5" />
+
+    {/* Face Screen */}
+    <rect x="23" y="30" width="54" height="30" rx="15" fill="#1e293b" />
     
     {/* Eyes */}
-    <circle cx="39" cy="46" r="5" fill="#38bdf8" />
-    <circle cx="61" cy="46" r="5" fill="#38bdf8" />
-    
+    <circle cx="36" cy="44" r="5.5" fill="#7dd3fc" />
+    <circle cx="64" cy="44" r="5.5" fill="#7dd3fc" />
+
     {/* Smile */}
-    <path d="M 45 51 Q 50 57 55 51" stroke="#38bdf8" strokeWidth="4" strokeLinecap="round" fill="none" />
+    <path d="M 45 48.5 Q 50 56 55 48.5 Z" fill="#7dd3fc" strokeLinejoin="round" />
   </svg>
 );
 
@@ -1932,7 +1939,7 @@ export default function App() {
             onClick={() => setShowQAModal(true)}
             className="w-full flex items-center justify-center gap-2 py-3 px-3 bg-white border border-ink-900/5 rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] text-ink-800 hover:bg-cream-50 transition-all shadow-sm hover:shadow-md"
           >
-            <RobotIcon size={24} className="text-[#0f172a]" />
+            <RobotIcon size={26} className="text-[#0f172a] drop-shadow-sm" />
             Hỏi đáp
           </button>
           <button 
@@ -2348,8 +2355,12 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative bg-white rounded-3xl p-8 max-w-[680px] w-full shadow-2xl mx-4 overflow-hidden"
+              className="relative bg-white/95 backdrop-blur-sm rounded-3xl p-8 max-w-[680px] w-full shadow-2xl mx-4 overflow-hidden"
             >
+              <div 
+                 className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.06]" 
+                 style={{ backgroundImage: 'url("/bg-notebook.png")' }}
+              />
               <button 
                 onClick={() => setShowQAModal(false)}
                 className="absolute right-5 top-5 text-slate-400 hover:text-slate-600 bg-slate-50 hover:bg-slate-100 p-2 rounded-full transition-colors z-20"
@@ -2357,12 +2368,12 @@ export default function App() {
                 <X size={18} />
               </button>
               
-              <div className="flex flex-col md:flex-row gap-8 items-center">
+              <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center">
                 <div className="flex-1 text-center md:text-left">
                   <div className="w-[100px] h-[100px] mx-auto md:mx-0 bg-gradient-to-b from-[#fef08a] to-[#fde047] p-[4px] rounded-[2.2rem] mb-6 relative shadow-sm">
                      <div className="w-full h-full bg-[#fef9c3] rounded-[2rem] flex items-center justify-center">
                        <div className="absolute inset-0 border-4 border-white/50 rounded-[2.2rem] pointer-events-none" />
-                       <RobotIcon size={70} className="text-[#0f172a] drop-shadow-md" />
+                       <RobotIcon size={80} className="text-[#0f172a] drop-shadow-sm" />
                      </div>
                   </div>
                   
