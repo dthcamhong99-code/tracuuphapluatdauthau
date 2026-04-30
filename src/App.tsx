@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useCallback, useEffect, useDeferredValue } from 'react';
-import { Search, ChevronRight, Gavel, BookOpen, AlertCircle, Info, Menu, X, ArrowLeft, Filter, ChevronDown, Scale, ScrollText, Snowflake, Download, Bookmark, MessageCircleHeart, Pencil, Target, FolderOpen, ClipboardCheck, Pin, PinOff } from 'lucide-react';
+import { Search, ChevronRight, Gavel, BookOpen, AlertCircle, Info, Menu, X, ArrowLeft, Filter, ChevronDown, Scale, ScrollText, Snowflake, Download, Bookmark, MessageCircleHeart, Pencil, Target, FolderOpen, ClipboardCheck, Pin, PinOff, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { QRCodeSVG } from 'qrcode.react';
 import { DOCUMENTS, allLawArticles } from './data/lawData';
@@ -7,6 +7,43 @@ import { nghiDinh214Data, allNd214Articles } from './data/nd214';
 import { thongTu79Data, allTt79Articles } from './data/tt79';
 import { Chapter, Article, DocumentData, UserNote } from './types';
 import { logoBase64 } from './logoData';
+
+const RobotIcon = ({ size = 24, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    {/* Shadow */}
+    <ellipse cx="50" cy="90" rx="20" ry="4" fill="#cbd5e1" opacity="0.8" />
+    
+    {/* Antenna Base/Line */}
+    <line x1="50" y1="30" x2="50" y2="16" stroke="#1e293b" strokeWidth="4" strokeLinecap="round" />
+    
+    {/* Antenna Ball */}
+    <circle cx="50" cy="12" r="5" fill="#38bdf8" stroke="#1e293b" strokeWidth="4" />
+    
+    {/* Body */}
+    <path d="M 28 50 C 28 92, 72 92, 72 50 Z" fill="white" stroke="#1e293b" strokeWidth="4" strokeLinejoin="round" />
+    
+    {/* Arms */}
+    <g transform="rotate(20 18 64)">
+      <ellipse cx="18" cy="64" rx="6" ry="10" fill="white" stroke="#1e293b" strokeWidth="4" />
+    </g>
+    <g transform="rotate(-20 82 64)">
+      <ellipse cx="82" cy="64" rx="6" ry="10" fill="white" stroke="#1e293b" strokeWidth="4" />
+    </g>
+
+    {/* Head */}
+    <rect x="20" y="28" width="60" height="42" rx="18" fill="white" stroke="#1e293b" strokeWidth="4" />
+    
+    {/* Screen */}
+    <rect x="28" y="36" width="44" height="26" rx="10" fill="#1e293b" />
+    
+    {/* Eyes */}
+    <circle cx="39" cy="46" r="5" fill="#38bdf8" />
+    <circle cx="61" cy="46" r="5" fill="#38bdf8" />
+    
+    {/* Smile */}
+    <path d="M 45 51 Q 50 57 55 51" stroke="#38bdf8" strokeWidth="4" strokeLinecap="round" fill="none" />
+  </svg>
+);
 
 function DocumentPane({
   docData,
@@ -911,6 +948,7 @@ export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [showDocumentModal, setShowDocumentModal] = useState(false);
+  const [showQAModal, setShowQAModal] = useState(false);
   const [showLegalBasis, setShowLegalBasis] = useState(false);
 
   interface BookmarkItem {
@@ -1891,6 +1929,13 @@ export default function App() {
 
         <div className="p-4 border-t border-ink-900/5 mt-auto flex flex-col gap-3">
           <button 
+            onClick={() => setShowQAModal(true)}
+            className="w-full flex items-center justify-center gap-2 py-3 px-3 bg-white border border-ink-900/5 rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] text-ink-800 hover:bg-cream-50 transition-all shadow-sm hover:shadow-md"
+          >
+            <RobotIcon size={24} className="text-[#0f172a]" />
+            Hỏi đáp
+          </button>
+          <button 
             onClick={() => setShowDocumentModal(true)}
             className="w-full flex items-center justify-center gap-2 py-3 px-3 bg-white border border-ink-900/5 rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] text-ink-800 hover:bg-cream-50 transition-all shadow-sm hover:shadow-md"
           >
@@ -2281,6 +2326,82 @@ export default function App() {
                       excavate: true,
                     }}
                   />
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* QA Modal */}
+      <AnimatePresence>
+        {showQAModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowQAModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative bg-white rounded-3xl p-8 max-w-[680px] w-full shadow-2xl mx-4 overflow-hidden"
+            >
+              <button 
+                onClick={() => setShowQAModal(false)}
+                className="absolute right-5 top-5 text-slate-400 hover:text-slate-600 bg-slate-50 hover:bg-slate-100 p-2 rounded-full transition-colors z-20"
+              >
+                <X size={18} />
+              </button>
+              
+              <div className="flex flex-col md:flex-row gap-8 items-center">
+                <div className="flex-1 text-center md:text-left">
+                  <div className="w-[100px] h-[100px] mx-auto md:mx-0 bg-gradient-to-b from-[#fef08a] to-[#fde047] p-[4px] rounded-[2.2rem] mb-6 relative shadow-sm">
+                     <div className="w-full h-full bg-[#fef9c3] rounded-[2rem] flex items-center justify-center">
+                       <div className="absolute inset-0 border-4 border-white/50 rounded-[2.2rem] pointer-events-none" />
+                       <RobotIcon size={70} className="text-[#0f172a] drop-shadow-md" />
+                     </div>
+                  </div>
+                  
+                  <h2 className="text-2xl font-bold text-slate-800 mb-3 tracking-tight">Trợ lý AI</h2>
+                  <p className="text-slate-500 text-[14px] leading-relaxed text-justify">
+                     Khám phá tính năng hỏi đáp thông minh được cung cấp bởi Google NotebookLM. Trợ lý AI có khả năng giải đáp các thắc mắc chuyên sâu, tra cứu nhanh các quy định, và giúp bạn hiểu rõ hơn về Luật Đấu thầu Việt Nam.
+                  </p>
+                </div>
+                
+                <div className="w-full md:w-[280px] shrink-0 space-y-3 flex flex-col items-center">
+                  <a 
+                    href="https://notebooklm.google.com/notebook/139ef39b-d491-4c80-ae9d-4d4d502d23b0"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center justify-center gap-1 w-full py-3 px-4 bg-[#0f172a] text-white rounded-xl hover:bg-[#1e293b] transition-all shadow-md group border border-slate-700"
+                  >
+                    <span className="font-bold text-[15px] text-yellow-400 flex items-center gap-1.5">Mở NotebookLM <ExternalLink size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" /></span>
+                    <span className="text-[12px] font-medium text-slate-400">Trợ lý AI về Luật Đấu Thầu</span>
+                  </a>
+                  
+                  <a 
+                    href="https://notebooklm.google.com/notebook/80054c02-0ab0-4391-a412-974f7c1c9a47"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center justify-center gap-1 w-full py-3 px-4 bg-[#0f172a] text-white rounded-xl hover:bg-[#1e293b] transition-all shadow-md group border border-slate-700"
+                  >
+                    <span className="font-bold text-[15px] text-yellow-400 flex items-center gap-1.5">Mở NotebookLM <ExternalLink size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" /></span>
+                    <span className="text-[12px] font-medium text-slate-400 text-center">Trợ lý AI hướng dẫn mẫu hồ sơ Đấu thầu</span>
+                  </a>
+
+                  <a 
+                    href="https://notebooklm.google.com/notebook/79d26a87-0bfa-4ee1-9f69-467065085ae5"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center justify-center gap-1 w-full py-3 px-4 bg-[#0f172a] text-white rounded-xl hover:bg-[#1e293b] transition-all shadow-md group border border-slate-700"
+                  >
+                    <span className="font-bold text-[15px] text-yellow-400 flex items-center gap-1.5">Mở NotebookLM <ExternalLink size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" /></span>
+                    <span className="text-[12px] font-medium text-slate-400 text-center">Trợ lý AI về Quy chế EVNHCMC</span>
+                  </a>
                 </div>
               </div>
             </motion.div>
